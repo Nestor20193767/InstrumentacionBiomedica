@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySync - Gamificación y Enfoque</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-bottom: 70px; }
+        .trophy-icon { color: #ffc107; font-size: 2rem; }
+        .stress-indicator { height: 10px; border-radius: 5px; transition: width 0.5s ease-in-out; }
+
+        /* Bottom Navigation para móviles */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .nav-link.active { color: #0d6efd !important; font-weight: bold; }
+
+        /* Ocultar secciones no activas */
+        .micro-frontend { display: none; }
+        .micro-frontend.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar -->
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1 fw-bold text-primary">
+                <i class="bi bi-controller"></i> StudySync
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="badge bg-success me-2"><i class="bi bi-fire"></i> Racha: 5 días</span>
+                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" class="rounded-circle" width="35" alt="Perfil">
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- MICROFRONTEND 1: DASHBOARD & WEARABLE DATA -->
+        <div id="dashboard-app" class="micro-frontend active">
+            <h4 class="mb-3">Tu Progreso de Hoy</h4>
+
+            <!-- CONTROLES BLUETOOTH -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body text-center">
+                    <button class="btn btn-primary w-100 mb-2" id="btn-bluetooth" onclick="connectToWearable()">
+                        <i class="bi bi-bluetooth"></i> Conectar Wearable
+                    </button>
+                    <small id="bt-status" class="text-muted d-block"><i class="bi bi-x-circle"></i> Wearable desconectado</small>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <!-- Tarjeta de Tiempo -->
+                <div class="col-6">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3">
+                        <i class="bi bi-stopwatch fs-1 text-primary"></i>
+                        <h5 class="mt-2 mb-0">120 min</h5>
+                        <small class="text-muted">Estudio Profundo</small>
+                    </div>
+                </div>
+                <!-- Tarjeta de Estrés (Datos del Wearable / HRV) -->
+                <div class="col-6">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3">
+                        <i class="bi bi-activity fs-1 text-secondary" id="stress-icon"></i>
+                        <h5 class="mt-2 mb-0" id="stress-value">--</h5>
+                        <small class="text-muted">Carga Cognitiva</small>
+                        <div class="progress mt-2 stress-indicator">
+                            <div class="progress-bar bg-secondary" id="stress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trofeos -->
+            <h5 class="mt-4 mb-3">Tus Logros</h5>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-center">
+                        <i class="bi bi-trophy-fill trophy-icon"></i>
+                        <p class="mb-0 small">Madrugador</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="bi bi-award-fill trophy-icon" style="color: silver;"></i>
+                        <p class="mb-0 small">Foco 2H</p>
+                    </div>
+                    <div class="text-center opacity-50">
+                        <i class="bi bi-star-fill trophy-icon" style="color: #6c757d;"></i>
+                        <p class="mb-0 small">Zen Master</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MICROFRONTEND 2: CLASIFICACIÓN (LEADERBOARD) -->
+        <div id="leaderboard-app" class="micro-frontend">
+            <h4 class="mb-3">Liga de Estudio</h4>
+            <div class="card border-0 shadow-sm">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold">
+                        <div><span class="me-3">1</span> 🥇 Paula</div>
+                        <span>450 pts</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-primary fw-bold">
+                        <div><span class="me-3">2</span> 🥈 Tú</div>
+                        <span>320 pts</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div><span class="me-3">3</span> 🥉 Oliver</div>
+                        <span>290 pts</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MICROFRONTEND 3: SALAS DE ESTUDIO (WEBSOCKETS) -->
+        <div id="room-app" class="micro-frontend">
+            <h4 class="mb-3">Salas de Estudio en Vivo</h4>
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="room-code" placeholder="Código de sala">
+                        <button class="btn btn-primary" id="btn-join-room" onclick="joinRoom()">Unirse</button>
+                    </div>
+
+                    <!-- Estado de la sala activa -->
+                    <div id="active-room" class="d-none text-center">
+                        <h5 class="text-success"><i class="bi bi-broadcast"></i> Conectado a la Sala</h5>
+                        <h2 class="display-4 fw-bold my-3" id="shared-timer">00:00</h2>
+                        <p class="text-muted">Conectados: <span id="peer-count">1</span></p>
+                        <ul class="list-unstyled d-flex justify-content-center gap-3" id="peer-list">
+                            <!-- Peers inyectados vía WS -->
+                        </ul>
+                        <button class="btn btn-danger w-100 mt-2" onclick="leaveRoom()">Salir de la sala</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav d-flex justify-content-around p-2">
+        <a href="#" class="nav-link text-secondary active text-center flex-fill" onclick="switchTab('dashboard-app', this)">
+            <i class="bi bi-house-door fs-4 d-block"></i>
+            <small>Inicio</small>
+        </a>
+        <a href="#" class="nav-link text-secondary text-center flex-fill" onclick="switchTab('leaderboard-app', this)">
+            <i class="bi bi-bar-chart-steps fs-4 d-block"></i>
+            <small>Ranking</small>
+        </a>
+        <a href="#" class="nav-link text-secondary text-center flex-fill" onclick="switchTab('room-app', this)">
+            <i class="bi bi-people fs-4 d-block"></i>
+            <small>Salas</small>
+        </a>
+    </nav>
+
+    <!-- Librería Socket.IO para Flask -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <!-- Scripts de la Aplicación -->
+    <script>
+        // Inicializar cliente SocketIO (apuntando al host actual)
+        // const socket = io();
+
+        // ==========================================
+        // 1. LÓGICA DE NAVEGACIÓN
+        // ==========================================
+        function switchTab(targetId, element) {
+            document.querySelectorAll('.micro-frontend').forEach(el => el.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+
+            document.querySelectorAll('.bottom-nav .nav-link').forEach(el => el.classList.remove('active', 'text-primary'));
+            element.classList.add('active', 'text-primary');
+            element.classList.remove('text-secondary');
+        }
+
+        // ==========================================
+        // 2. LÓGICA WEB BLUETOOTH (WEARABLE)
+        // ==========================================
+
+        // ¡IMPORTANTE! Reemplaza estos UUIDs por los que configures en tu código de la Raspberry Pi (MicroPython/C)
+        const STRESS_SERVICE_UUID = '0000180d-0000-1000-8000-00805f9b34fb'; // UUID del servicio principal
+        const HRV_CHARACTERISTIC_UUID = '00002a37-0000-1000-8000-00805f9b34fb'; // UUID de la característica que envía los datos
+
+        let bluetoothDevice = null;
+
+        async function connectToWearable() {
+            const statusLabel = document.getElementById('bt-status');
+            const btButton = document.getElementById('btn-bluetooth');
+
+            try {
+                statusLabel.innerHTML = '<i class="spinner-border spinner-border-sm"></i> Solicitando conexión...';
+
+                // Abre el pop-up nativo del celular para buscar dispositivos Bluetooth
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ services: [STRESS_SERVICE_UUID] }]
+                });
+
+                statusLabel.innerHTML = `<i class="spinner-border spinner-border-sm"></i> Conectando a ${bluetoothDevice.name}...`;
+
+                // Conexión al servidor GATT del wearable
+                const server = await bluetoothDevice.gatt.connect();
+                const service = await server.getPrimaryService(STRESS_SERVICE_UUID);
+                const characteristic = await service.getCharacteristic(HRV_CHARACTERISTIC_UUID);
+
+                // Iniciar escucha de datos en tiempo real
+                await characteristic.startNotifications();
+                characteristic.addEventListener('characteristicvaluechanged', handleIncomingData);
+
+                // Actualizar Interfaz: Éxito
+                statusLabel.innerHTML = `<i class="bi bi-check-circle-fill text-success"></i> Conectado a ${bluetoothDevice.name}`;
+                btButton.classList.replace('btn-primary', 'btn-success');
+                btButton.innerHTML = '<i class="bi bi-bluetooth"></i> Wearable Sincronizado';
+                document.getElementById('stress-icon').classList.replace('text-secondary', 'text-danger');
+
+                // Si se desconecta, manejarlo
+                bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
+
+            } catch (error) {
+                console.error("Error de Bluetooth: ", error);
+                statusLabel.innerHTML = `<i class="bi bi-exclamation-triangle-fill text-danger"></i> Error: ${error.message}`;
+            }
+        }
+
+        function handleIncomingData(event) {
+            // Se asume que el wearable envía un entero de 8 bits (0 a 100)
+            const value = event.target.value;
+            const stressLevel = value.getUint8(0);
+
+            updateStressUI(stressLevel);
+
+            // Si estás en una sala, enviar el dato al backend por WebSocket
+            // if(socket && socket.connected) {
+            //     socket.emit('wearable_data_sync', { stress_level: stressLevel });
+            // }
+        }
+
+        function updateStressUI(stressLevel) {
+            const bar = document.getElementById('stress-bar');
+            const label = document.getElementById('stress-value');
+
+            bar.style.width = `${stressLevel}%`;
+
+            if(stressLevel < 40) {
+                bar.className = 'progress-bar bg-success';
+                label.innerText = 'Nivel: Óptimo';
+            } else if (stressLevel < 75) {
+                bar.className = 'progress-bar bg-warning';
+                label.innerText = 'Nivel: Alerta';
+            } else {
+                bar.className = 'progress-bar bg-danger';
+                label.innerText = 'Nivel: Estrés Alto';
+            }
+        }
+
+        function onDisconnected() {
+            const statusLabel = document.getElementById('bt-status');
+            const btButton = document.getElementById('btn-bluetooth');
+
+            statusLabel.innerHTML = '<i class="bi bi-x-circle text-danger"></i> Desconectado';
+            btButton.classList.replace('btn-success', 'btn-primary');
+            btButton.innerHTML = '<i class="bi bi-bluetooth"></i> Reconectar Wearable';
+            document.getElementById('stress-icon').classList.replace('text-danger', 'text-secondary');
+
+            // Limpiar la barra
+            document.getElementById('stress-bar').style.width = '0%';
+            document.getElementById('stress-value').innerText = '--';
+        }
+
+        // ==========================================
+        // 3. LÓGICA WEBSOCKETS (SALAS DE ESTUDIO)
+        // ==========================================
+        let timerInterval;
+
+        function joinRoom() {
+            const code = document.getElementById('room-code').value;
+            if(!code) return alert("Ingresa un código de sala");
+
+            // Descomentar para usar Socket.IO con Flask
+            // socket.emit('join_study_room', { room_code: code, username: 'Yo' });
+
+            document.querySelector('.input-group').classList.add('d-none');
+            document.getElementById('active-room').classList.remove('d-none');
+
+            // Peers simulados en interfaz
+            document.getElementById('peer-list').innerHTML = `
+                <li><img src="https://ui-avatars.com/api/?name=T&background=0D8ABC&color=fff" class="rounded-circle border border-2 border-success" width="40"></li>
+                <li><img src="https://ui-avatars.com/api/?name=O&background=198754&color=fff" class="rounded-circle border border-2 border-warning" width="40"></li>
+            `;
+            document.getElementById('peer-count').innerText = "2";
+
+            startTimer();
+        }
+
+        function leaveRoom() {
+            // Descomentar para usar Socket.IO con Flask
+            // const code = document.getElementById('room-code').value;
+            // socket.emit('leave_study_room', { room_code: code, username: 'Yo' });
+
+            clearInterval(timerInterval);
+            document.getElementById('shared-timer').innerText = "00:00";
+            document.querySelector('.input-group').classList.remove('d-none');
+            document.getElementById('active-room').classList.add('d-none');
+        }
+
+        function startTimer() {
+            let seconds = 0;
+            timerInterval = setInterval(() => {
+                seconds++;
+                const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const s = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('shared-timer').innerText = `${m}:${s}`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
