@@ -7,7 +7,7 @@ Plataforma web de gamificación y estudio colaborativo en tiempo real. Integra m
 
 El proyecto emplea una arquitectura modular (microfrontends) que separa la interfaz en componentes independientes, con un flujo de datos bidireccional optimizado para el procesamiento en tiempo real de bioseñales.
 
-```text
+
 [ Wearable (RP2040 / BLE) ]
             │
             │ (Web Bluetooth API)
@@ -21,7 +21,10 @@ El proyecto emplea una arquitectura modular (microfrontends) que separa la inter
             ▼
 [ Backend (Servidor Flask) ]
   └─ Eventlet (Servidor Asíncrono)
-📂 Estructura Inicial del Proyecto
+
+---
+
+##📂 Estructura Inicial del Proyecto
 Plaintext
 StudySync/
 │
@@ -29,7 +32,9 @@ StudySync/
 ├── requirements.txt       # Dependencias de Python
 └── templates/
     └── index.html         # Interfaz orquestadora (Microfrontends + JS)
-🛠️ Stack Tecnológico y Librerías
+
+    ---
+##🛠️ Stack Tecnológico y Librerías
 Backend (Python)
 Flask: Framework ligero para servir la aplicación web.
 
@@ -44,7 +49,7 @@ Web Bluetooth API: API nativa de JavaScript (sin dependencias externas) que perm
 
 Socket.IO Client: Librería de JS para establecer la conexión WebSocket con el servidor Flask.
 
-🚀 Despliegue y Ejecución Local (Pruebas con Hardware)
+##🚀 Despliegue y Ejecución Local (Pruebas con Hardware)
 Debido a estrictas políticas de seguridad de los navegadores modernos, el Web Bluetooth API solo funciona bajo un contexto seguro (HTTPS). Para probar la conexión con el wearable desde tu celular hacia tu servidor local, utilizaremos ngrok.
 
 Paso 1: Instalar dependencias e iniciar el servidor
