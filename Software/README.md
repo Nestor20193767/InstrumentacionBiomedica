@@ -1,78 +1,198 @@
 
+````markdown
 # StudySync ⏱️🧠
 
-Plataforma web de gamificación y estudio colaborativo en tiempo real. Integra métricas fisiológicas (estrés/HRV) a través de dispositivos wearables para monitorizar la carga cognitiva de los usuarios durante sus sesiones de enfoque.
-
-## 🏗️ Arquitectura del Sistema
-
-El proyecto emplea una arquitectura modular (microfrontends) que separa la interfaz en componentes independientes, con un flujo de datos bidireccional optimizado para el procesamiento en tiempo real de bioseñales.
-
-
-[ Wearable (RP2040 / BLE) ]
-            │
-            │ (Web Bluetooth API)
-            ▼
-[ Frontend (Navegador Móvil/Tablet) ] 
-  ├─ Microfrontend: Dashboard (Métricas)
-  ├─ Microfrontend: Leaderboard
-  └─ Microfrontend: Study Rooms
-            │
-            │ (WebSockets / Socket.IO)
-            ▼
-[ Backend (Servidor Flask) ]
-  └─ Eventlet (Servidor Asíncrono)
+> Plataforma web de estudio colaborativo y gamificación en tiempo real que integra métricas fisiológicas (estrés y HRV) mediante dispositivos *wearables* para monitorear la carga cognitiva durante sesiones de enfoque.
 
 ---
 
-##📂 Estructura Inicial del Proyecto
-Plaintext
+# ✨ Características Principales
+
+- 📚 Salas de estudio colaborativas en tiempo real.
+- 🧠 Monitoreo de estrés y variabilidad cardíaca (HRV).
+- 📊 Dashboard de métricas fisiológicas y productividad.
+- 🏆 Sistema de gamificación y leaderboard.
+- 📱 Diseño responsive (*mobile-first*).
+- 🔗 Integración BLE (*Bluetooth Low Energy*) con wearables RP2040.
+- ⚡ Comunicación en tiempo real mediante WebSockets.
+
+---
+
+# 🏗️ Arquitectura del Sistema
+
+El proyecto utiliza una arquitectura modular basada en **microfrontends**, permitiendo desacoplar funcionalidades independientes y optimizar el procesamiento de bioseñales en tiempo real.
+
+```text
+[ Wearable (RP2040 / BLE) ]
+            │
+            │ Web Bluetooth API
+            ▼
+[ Frontend (Mobile / Tablet Browser) ]
+  ├── Dashboard (Métricas)
+  ├── Leaderboard
+  └── Study Rooms
+            │
+            │ WebSockets / Socket.IO
+            ▼
+[ Backend (Flask Server) ]
+  └── Eventlet (Servidor Asíncrono)
+````
+
+---
+
+# 📂 Estructura Inicial del Proyecto
+
+```text
 StudySync/
 │
-├── main.py                # Servidor principal Flask y configuración WebSocket
-├── requirements.txt       # Dependencias de Python
+├── main.py                # Servidor principal Flask + configuración Socket.IO
+├── requirements.txt       # Dependencias Python
 └── templates/
-    └── index.html         # Interfaz orquestadora (Microfrontends + JS)
+    └── index.html         # Interfaz principal y orquestación de microfrontends
+```
 
-    ---
-##🛠️ Stack Tecnológico y Librerías
-Backend (Python)
-Flask: Framework ligero para servir la aplicación web.
+---
 
-Flask-SocketIO: Habilita la comunicación bidireccional y de baja latencia entre el cliente y el servidor. Esencial para la sincronización de temporizadores en las "Salas de Estudio".
+# 🛠️ Stack Tecnológico
 
-Eventlet: Servidor asíncrono de alto rendimiento. Flask-SocketIO lo requiere para manejar múltiples conexiones concurrentes sin bloquear el hilo principal.
+## Backend (Python)
 
-Frontend
-Bootstrap 5: Framework CSS utilizado para el diseño responsive (mobile-first), ideal para visualización en celulares y tablets.
+### Flask
 
-Web Bluetooth API: API nativa de JavaScript (sin dependencias externas) que permite al navegador conectarse directamente al servidor GATT del wearable para recibir datos fisiológicos vía Bluetooth Low Energy (BLE).
+Framework web ligero utilizado para servir la aplicación y gestionar rutas HTTP.
 
-Socket.IO Client: Librería de JS para establecer la conexión WebSocket con el servidor Flask.
+### Flask-SocketIO
 
-##🚀 Despliegue y Ejecución Local (Pruebas con Hardware)
-Debido a estrictas políticas de seguridad de los navegadores modernos, el Web Bluetooth API solo funciona bajo un contexto seguro (HTTPS). Para probar la conexión con el wearable desde tu celular hacia tu servidor local, utilizaremos ngrok.
+Permite comunicación bidireccional en tiempo real entre cliente y servidor. Fundamental para sincronizar sesiones y temporizadores colaborativos.
 
-Paso 1: Instalar dependencias e iniciar el servidor
-Bash
-# Crear y activar entorno virtual (opcional pero recomendado)
+### Eventlet
+
+Servidor asíncrono de alto rendimiento requerido por Flask-SocketIO para manejar múltiples conexiones concurrentes sin bloquear el hilo principal.
+
+---
+
+## Frontend
+
+### Bootstrap 5
+
+Framework CSS utilizado para construir una interfaz responsive optimizada para celulares y tablets.
+
+### Web Bluetooth API
+
+API nativa de JavaScript que permite conectarse directamente a dispositivos BLE desde el navegador sin dependencias externas.
+
+### Socket.IO Client
+
+Cliente JavaScript encargado de establecer y mantener la conexión WebSocket con el backend Flask.
+
+---
+
+# 🚀 Ejecución Local y Pruebas con Hardware
+
+> ⚠️ **Importante:**
+> La Web Bluetooth API solo funciona bajo un contexto seguro (**HTTPS**) debido a las políticas de seguridad de los navegadores modernos.
+
+Para probar la conexión BLE desde un celular hacia tu servidor local, se recomienda utilizar **ngrok**.
+
+---
+
+## 1️⃣ Instalar dependencias e iniciar el servidor
+
+```bash
+# Crear entorno virtual (opcional pero recomendado)
 uv venv
-source .venv/bin/activate  # En Windows: .venv\Scripts\activate
 
-# Instalar librerías
+# Activar entorno virtual
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
+
+# Instalar dependencias
 pip install -r requirements.txt
 
-# Iniciar el servidor (¡No usar 'flask run'!)
+# Iniciar servidor
 python main.py
-El servidor iniciará en http://localhost:5000 o http://0.0.0.0:5000.
+```
 
-Paso 2: Exponer el servidor con HTTPS (ngrok)
-En una nueva terminal, ejecuta:
+El servidor quedará disponible en:
 
-Bash
+```text
+http://localhost:5000
+```
+
+o
+
+```text
+http://0.0.0.0:5000
+```
+
+---
+
+## 2️⃣ Exponer el servidor mediante HTTPS usando ngrok
+
+En una nueva terminal:
+
+```bash
 ngrok http 5000
-Paso 3: Probar en el celular
-Copia la URL generada por ngrok (ejemplo: https://abcd-123.ngrok.app).
+```
 
-Ábrela en el navegador (Chrome) de tu celular o tablet.
+ngrok generará una URL HTTPS similar a:
 
-Enciende tu wearable y presiona el botón "Conectar Wearable" en la interfaz para iniciar el emparejamiento Bluetooth.
+```text
+https://abcd-123.ngrok.app
+```
+
+---
+
+## 3️⃣ Probar desde el celular o tablet
+
+1. Abrir la URL HTTPS generada por ngrok en **Google Chrome**.
+2. Encender el wearable BLE.
+3. Presionar el botón **"Conectar Wearable"** en la interfaz.
+4. Aceptar el emparejamiento Bluetooth.
+
+---
+
+# 📡 Flujo de Datos
+
+```text
+Wearable BLE
+   ↓
+Web Bluetooth API
+   ↓
+Frontend Dashboard
+   ↓
+Socket.IO
+   ↓
+Backend Flask
+   ↓
+Broadcast en tiempo real a Study Rooms y Leaderboards
+```
+
+---
+
+# 🔮 Roadmap
+
+* [ ] Persistencia de métricas en base de datos.
+* [ ] Autenticación de usuarios.
+* [ ] Historial de sesiones de estudio.
+* [ ] IA para análisis de fatiga cognitiva.
+* [ ] Integración con más dispositivos wearables.
+* [ ] Sistema avanzado de recompensas y logros.
+
+---
+
+# 🤝 Contribuciones
+
+Las contribuciones son bienvenidas.
+Puedes abrir un *issue* o enviar un *pull request* para proponer mejoras.
+
+---
+
+# 📄 Licencia
+
+Este proyecto se distribuye bajo la licencia MIT.
+
+```
+```
