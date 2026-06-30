@@ -148,65 +148,190 @@ ngrok http 5000
 # 🔄 Flujo de Usuario Completo
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'background': 'transparent', 'primaryColor': '#4F46E5', 'secondaryColor': '#10B981', 'tertiaryColor': '#F59E0B'}}}%%
 flowchart TD
-    A([🟢 Usuario abre la app]) --> B
 
-    subgraph PASO1 ["PASO 1 · Configuración y Conexión BLE"]
-        B[Mostrar diagrama de colocación\nRA · LA · LL] --> C[Instrucciones de electrodos e inspección de piel]
-        C --> D[Botón → Conectar HealthyPi 5]
-        D --> E{¿BLE disponible\nen navegador?}
-        E -- No --> E1[⚠️ Mostrar aviso:\nRequiere HTTPS / Chrome / ngrok]
-        E1 --> D
-        E -- Sí --> F[Pop-up nativo Bluetooth\nSeleccionar dispositivo]
-        F --> G{¿Emparejamiento\naceptado?}
-        G -- No / Error --> G1[Mostrar error BLE\nReintentar]
-        G1 --> D
-        G -- Sí --> H[✅ Dispositivo conectado\nActualizar estado en UI]
-    end
+%%==========================
+%% ESTILOS
+%%==========================
 
-    H --> I
+classDef start fill:#7c3aed,stroke:#4c1d95,color:#ffffff,stroke-width:2px;
+classDef process fill:#2563eb,stroke:#1e40af,color:#ffffff,stroke-width:2px;
+classDef decision fill:#059669,stroke:#065f46,color:#ffffff,stroke-width:2px;
+classDef warning fill:#dc2626,stroke:#991b1b,color:#ffffff,stroke-width:2px;
+classDef success fill:#16a34a,stroke:#166534,color:#ffffff,stroke-width:2px;
+classDef end fill:#ea580c,stroke:#9a3412,color:#ffffff,stroke-width:2px;
 
-    subgraph PASO2 ["PASO 2 · Validación de Señal e Ingesta Basal"]
-        I[Iniciar análisis automático\nde calidad de señal] --> J[Aplicar filtros en tiempo real\n0.5 Hz Pasa-altas, Pasa-bajas, Notch 60 Hz]
-        J --> K[Detectar picos R\n≥ 250 Hz muestreo]
-        K --> L{¿Calidad de\nseñal óptima?}
-        L -- No (< 50% Débil) --> L1[⚠️ Notificar ajuste\nde electrodos]
-        L1 --> I
-        L -- Sí (≥ 50% Válida) --> M[Fase Baseline: Capturar 300 intervalos RR\n~5 min de señal limpia]
-        M --> N{¿Baseline\ncompletado?}
-        N -- No --> O[Emitir progreso basal\nevento: baseline_progress] --> M
-        N -- Sí --> P[Calcular RMSSD Basal\nevento: baseline_ready]
-    end
+%%==========================
+%% PASO 1
+%%==========================
 
-    P --> Q
+A([🟢 Usuario abre la app]):::start
 
-    subgraph PASO3 ["PASO 3 · Monitoreo Activo y Gamificación"]
-        Q[Ingresar Datos Iniciales\nEVA Score + Confundidores] --> R[Monitoreo en Tiempo Real\nVentanas de 5 min ≈ 75 intervalos RR]
-        R --> S[Procesar RMSSD actual\ny clasificar nivel de estrés]
-        S --> T{¿Variación de\nRMSSD respecto basal?}
-        T -- "< 15%" --> T1[Estrés Normal\nColor Verde]
-        T -- "15% - 30%" --> T2[Estrés Moderado\nColor Ámbar]
-        T -- "> 30%" --> T3[Estrés Elevado\nColor Rojo]
+subgraph PASO1["PASO 1 · Configuración y Conexión BLE"]
 
-        T1 & T2 & T3 --> U[Actualizar Dashboard e Ingestar Tiempo Efectivo]
-        U --> V{¿Estrés Elevado Sostenido\npor ≥ 2 ventanas consecutivas?}
-        V -- Sí --> W[🚨 Emitir alerta de descanso\nevento: rest_alert]
-        V -- No --> X[Flujo continuo de estudio]
-    end
+B[Mostrar diagrama de colocación<br/>RA · LA · LL]:::process
 
-    W --> Y
+C[Instrucciones de electrodos<br/>e inspección de piel]:::process
 
-    subgraph PASO4 ["PASO 4 · Toma de Decisiones e Interacción"]
-        Y{¿Usuario acepta\nel descanso?}
-        Y -- Sí --> Z[Registrar Bono de Descanso\nResetear contadores de estrés transitorio]
-        Z --> ZA[Usuario completa descanso de 5 min\ny gatilla evento: rest_return]
-        Y -- No --> ZB[Aplicar Penalización por estrés ignorado\nevento: stress_penalty_periods]
-        ZA & ZB & X --> ZC[¿Terminar Sesión?]
-        ZC -- No --> R
-        ZC -- Sí --> ZD[Gatillar evento: end_session\nCalcular IES y otorgar puntos XP]
-        ZD --> ZE([🏁 Mostrar Resumen Final de Productividad])
-    end
+D[Botón → Conectar HealthyPi 5]:::process
+
+E{¿BLE disponible<br/>en el navegador?}:::decision
+
+E1[⚠️ Requiere HTTPS<br/>Chrome + ngrok]:::warning
+
+F[Pop-up Bluetooth<br/>Seleccionar dispositivo]:::process
+
+G{¿Emparejamiento<br/>aceptado?}:::decision
+
+G1[Error BLE<br/>Reintentar]:::warning
+
+H[✅ Dispositivo conectado<br/>Actualizar estado UI]:::success
+
+B --> C
+C --> D
+D --> E
+E -- No --> E1
+E1 --> D
+E -- Sí --> F
+F --> G
+G -- No --> G1
+G1 --> D
+G -- Sí --> H
+
+end
+
+A --> B
+
+%%==========================
+%% PASO 2
+%%==========================
+
+subgraph PASO2["PASO 2 · Validación de Señal e Ingesta Basal"]
+
+I[Iniciar análisis automático<br/>de calidad de señal]:::process
+
+J[Aplicar filtros<br/>Pasa-altas, Pasa-bajas,<br/>Notch 60 Hz]:::process
+
+K[Detectar picos R<br/>≥250 Hz]:::process
+
+L{¿Calidad de señal<br/>óptima?}:::decision
+
+L1[⚠️ Ajustar electrodos]:::warning
+
+M[Fase Baseline<br/>Capturar 300 RR<br/>≈5 min]:::process
+
+N{¿Baseline<br/>completado?}:::decision
+
+O[Emitir evento<br/>baseline_progress]:::process
+
+P[Calcular RMSSD Basal<br/>baseline_ready]:::success
+
+I --> J
+J --> K
+K --> L
+
+L -- No --> L1
+L1 --> I
+
+L -- Sí --> M
+
+M --> N
+
+N -- No --> O
+O --> M
+
+N -- Sí --> P
+
+end
+
+H --> I
+
+%%==========================
+%% PASO 3
+%%==========================
+
+subgraph PASO3["PASO 3 · Monitoreo Activo y Gamificación"]
+
+Q[Ingresar EVA Score<br/>+ Confundidores]:::process
+
+R[Monitoreo en tiempo real<br/>Ventanas de 5 min]:::process
+
+S[Procesar RMSSD<br/>Clasificar estrés]:::process
+
+T{¿Variación RMSSD<br/>vs Basal?}:::decision
+
+T1[Estrés Normal<br/>🟢 Verde]:::success
+
+T2[Estrés Moderado<br/>🟡 Ámbar]:::process
+
+T3[Estrés Elevado<br/>🔴 Rojo]:::warning
+
+U[Actualizar Dashboard<br/>Tiempo efectivo]:::process
+
+V{¿Estrés elevado<br/>≥2 ventanas?}:::decision
+
+W[🚨 Emitir evento<br/>rest_alert]:::warning
+
+X[Continuar estudio]:::success
+
+Q --> R
+R --> S
+S --> T
+
+T -- "<15%" --> T1
+T -- "15-30%" --> T2
+T -- ">30%" --> T3
+
+T1 --> U
+T2 --> U
+T3 --> U
+
+U --> V
+
+V -- Sí --> W
+V -- No --> X
+
+end
+
+P --> Q
+
+%%==========================
+%% PASO 4
+%%==========================
+
+subgraph PASO4["PASO 4 · Toma de Decisiones e Interacción"]
+
+Y{¿Usuario acepta<br/>el descanso?}:::decision
+
+Z[Registrar Bono de Descanso<br/>Resetear contadores]:::success
+
+ZA[Usuario completa descanso<br/>Evento rest_return]:::success
+
+ZB[Aplicar penalización<br/>stress_penalty_periods]:::warning
+
+ZC{¿Terminar<br/>Sesión?}:::decision
+
+ZD[Evento end_session<br/>Calcular IES y XP]:::process
+
+ZE([🏁 Mostrar Resumen Final]):::end
+
+Y -- Sí --> Z
+Z --> ZA
+
+Y -- No --> ZB
+
+ZA --> ZC
+ZB --> ZC
+X --> ZC
+
+ZC -- No --> R
+
+ZC -- Sí --> ZD
+ZD --> ZE
+
+end
+
+W --> Y
 ```
 
 ---
