@@ -1,5 +1,4 @@
 
-````markdown
 # StudySync ⏱️🧠
 
 > Plataforma web de estudio colaborativo y gamificación en tiempo real que integra métricas fisiológicas (estrés y HRV) mediante dispositivos *wearables* para monitorear la carga cognitiva durante sesiones de enfoque.
@@ -267,7 +266,6 @@ $$
 
 Desarrollado para el proyecto de **Instrumentación Biomédica (C0688)** — *Universidad Peruana Cayetano Heredia*.
 
-```
 
 Si lo prefieres, también puedo entregártelo como un archivo **`README.md`** descargable.
 ```
