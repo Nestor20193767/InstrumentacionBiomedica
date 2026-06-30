@@ -326,7 +326,5 @@ $$
 
 Desarrollado para el proyecto de **Instrumentación Biomédica (C0688)** — *Universidad Peruana Cayetano Heredia*.
 
-
-Si lo prefieres, también puedo entregártelo como un archivo **`README.md`** descargable.
 ```
 
