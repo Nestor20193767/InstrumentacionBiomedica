@@ -150,82 +150,75 @@ ngrok http 5000
 ```mermaid
 flowchart TD
 
-%%==========================
-%% ESTILOS
-%%==========================
+%% ====== ESTILOS ======
+classDef start fill:#7C3AED,stroke:#4C1D95,color:#FFFFFF;
+classDef process fill:#2563EB,stroke:#1E40AF,color:#FFFFFF;
+classDef decision fill:#059669,stroke:#065F46,color:#FFFFFF;
+classDef warning fill:#DC2626,stroke:#991B1B,color:#FFFFFF;
+classDef success fill:#16A34A,stroke:#166534,color:#FFFFFF;
+classDef finish fill:#EA580C,stroke:#9A3412,color:#FFFFFF;
 
-classDef start fill:#7c3aed,stroke:#4c1d95,color:#ffffff,stroke-width:2px;
-classDef process fill:#2563eb,stroke:#1e40af,color:#ffffff,stroke-width:2px;
-classDef decision fill:#059669,stroke:#065f46,color:#ffffff,stroke-width:2px;
-classDef warning fill:#dc2626,stroke:#991b1b,color:#ffffff,stroke-width:2px;
-classDef success fill:#16a34a,stroke:#166534,color:#ffffff,stroke-width:2px;
-classDef end fill:#ea580c,stroke:#9a3412,color:#ffffff,stroke-width:2px;
-
-%%==========================
-%% PASO 1
-%%==========================
-
+%% ====== NODOS ======
 A([🟢 Usuario abre la app]):::start
 
-subgraph PASO1["PASO 1 · Configuración y Conexión BLE"]
-
 B[Mostrar diagrama de colocación<br/>RA · LA · LL]:::process
-
 C[Instrucciones de electrodos<br/>e inspección de piel]:::process
-
-D[Botón → Conectar HealthyPi 5]:::process
-
-E{¿BLE disponible<br/>en el navegador?}:::decision
-
-E1[⚠️ Requiere HTTPS<br/>Chrome + ngrok]:::warning
-
-F[Pop-up Bluetooth<br/>Seleccionar dispositivo]:::process
-
-G{¿Emparejamiento<br/>aceptado?}:::decision
-
+D[Conectar HealthyPi 5]:::process
+E{¿BLE disponible?}:::decision
+E1[Requiere HTTPS<br/>Chrome y ngrok]:::warning
+F[Seleccionar dispositivo Bluetooth]:::process
+G{¿Emparejamiento aceptado?}:::decision
 G1[Error BLE<br/>Reintentar]:::warning
+H[Dispositivo conectado]:::success
 
-H[✅ Dispositivo conectado<br/>Actualizar estado UI]:::success
+I[Analizar calidad de señal]:::process
+J[Aplicar filtros ECG]:::process
+K[Detectar picos R]:::process
+L{¿Calidad óptima?}:::decision
+L1[Ajustar electrodos]:::warning
+M[Capturar 300 RR<br/>Baseline]:::process
+N{¿Baseline listo?}:::decision
+O[Evento baseline_progress]:::process
+P[Calcular RMSSD basal]:::success
 
+Q[Ingresar EVA y confundidores]:::process
+R[Monitoreo continuo]:::process
+S[Procesar RMSSD]:::process
+T{Variación RMSSD}:::decision
+T1[Estrés Normal]:::success
+T2[Estrés Moderado]:::process
+T3[Estrés Elevado]:::warning
+U[Actualizar Dashboard]:::process
+V{¿Estrés elevado<br/>2 ventanas?}:::decision
+W[Emitir rest_alert]:::warning
+X[Continuar estudio]:::success
+
+Y{¿Aceptar descanso?}:::decision
+Z[Registrar descanso]:::success
+ZA[Completar descanso]:::success
+ZB[Aplicar penalización]:::warning
+ZC{¿Terminar sesión?}:::decision
+ZD[Calcular IES y XP]:::process
+ZE([🏁 Resumen Final]):::finish
+
+%% ====== CONEXIONES ======
+A --> B
 B --> C
 C --> D
 D --> E
+
 E -- No --> E1
 E1 --> D
+
 E -- Sí --> F
 F --> G
+
 G -- No --> G1
 G1 --> D
+
 G -- Sí --> H
 
-end
-
-A --> B
-
-%%==========================
-%% PASO 2
-%%==========================
-
-subgraph PASO2["PASO 2 · Validación de Señal e Ingesta Basal"]
-
-I[Iniciar análisis automático<br/>de calidad de señal]:::process
-
-J[Aplicar filtros<br/>Pasa-altas, Pasa-bajas,<br/>Notch 60 Hz]:::process
-
-K[Detectar picos R<br/>≥250 Hz]:::process
-
-L{¿Calidad de señal<br/>óptima?}:::decision
-
-L1[⚠️ Ajustar electrodos]:::warning
-
-M[Fase Baseline<br/>Capturar 300 RR<br/>≈5 min]:::process
-
-N{¿Baseline<br/>completado?}:::decision
-
-O[Emitir evento<br/>baseline_progress]:::process
-
-P[Calcular RMSSD Basal<br/>baseline_ready]:::success
-
+H --> I
 I --> J
 J --> K
 K --> L
@@ -234,7 +227,6 @@ L -- No --> L1
 L1 --> I
 
 L -- Sí --> M
-
 M --> N
 
 N -- No --> O
@@ -242,38 +234,7 @@ O --> M
 
 N -- Sí --> P
 
-end
-
-H --> I
-
-%%==========================
-%% PASO 3
-%%==========================
-
-subgraph PASO3["PASO 3 · Monitoreo Activo y Gamificación"]
-
-Q[Ingresar EVA Score<br/>+ Confundidores]:::process
-
-R[Monitoreo en tiempo real<br/>Ventanas de 5 min]:::process
-
-S[Procesar RMSSD<br/>Clasificar estrés]:::process
-
-T{¿Variación RMSSD<br/>vs Basal?}:::decision
-
-T1[Estrés Normal<br/>🟢 Verde]:::success
-
-T2[Estrés Moderado<br/>🟡 Ámbar]:::process
-
-T3[Estrés Elevado<br/>🔴 Rojo]:::warning
-
-U[Actualizar Dashboard<br/>Tiempo efectivo]:::process
-
-V{¿Estrés elevado<br/>≥2 ventanas?}:::decision
-
-W[🚨 Emitir evento<br/>rest_alert]:::warning
-
-X[Continuar estudio]:::success
-
+P --> Q
 Q --> R
 R --> S
 S --> T
@@ -291,47 +252,21 @@ U --> V
 V -- Sí --> W
 V -- No --> X
 
-end
-
-P --> Q
-
-%%==========================
-%% PASO 4
-%%==========================
-
-subgraph PASO4["PASO 4 · Toma de Decisiones e Interacción"]
-
-Y{¿Usuario acepta<br/>el descanso?}:::decision
-
-Z[Registrar Bono de Descanso<br/>Resetear contadores]:::success
-
-ZA[Usuario completa descanso<br/>Evento rest_return]:::success
-
-ZB[Aplicar penalización<br/>stress_penalty_periods]:::warning
-
-ZC{¿Terminar<br/>Sesión?}:::decision
-
-ZD[Evento end_session<br/>Calcular IES y XP]:::process
-
-ZE([🏁 Mostrar Resumen Final]):::end
+W --> Y
 
 Y -- Sí --> Z
-Z --> ZA
-
 Y -- No --> ZB
+
+Z --> ZA
 
 ZA --> ZC
 ZB --> ZC
 X --> ZC
 
 ZC -- No --> R
-
 ZC -- Sí --> ZD
+
 ZD --> ZE
-
-end
-
-W --> Y
 ```
 
 ---
