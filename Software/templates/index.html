@@ -900,8 +900,9 @@
     // ================================================================
     //  4. BLUETOOTH
     // ================================================================
-    const STRESS_SERVICE_UUID     = '0000180d-0000-1000-8000-00805f9b34fb';
-    const HRV_CHARACTERISTIC_UUID = '00002a37-0000-1000-8000-00805f9b34fb';
+    const STRESS_SERVICE_UUID     = 'cd5c7491-4448-7db8-ae4c-d1da8cba36d0';
+    const HRV_CHARACTERISTIC_UUID = 'cd5c1525-4448-7db8-ae4c-d1da8cba36d0';
+    
     let bluetoothDevice = null;
     let latestRmssd = null;
 
@@ -931,33 +932,33 @@
 
     function onBleData(event) {
         const dv = event.target.value;
-        
+
         // 1. Leer los Flags (Byte 0) para saber qué datos vienen en el paquete
         const flags = dv.getUint8(0);
         const is16BitHr = flags & 0x01;
         const hasEnergyExpended = (flags >> 3) & 0x01;
         const hasRR = (flags >> 4) & 0x01; // Verifica si hay datos RR
-    
+
         let offset = 1;
-        
+
         // Saltar los bytes del Heart Rate y Energy (no los usamos para el HRV)
         offset += is16BitHr ? 2 : 1;
         if (hasEnergyExpended) offset += 2;
-    
+
         // 2. Extraer los intervalos RR
         if (hasRR) {
             while (offset < dv.byteLength) {
                 const rawRR = dv.getUint16(offset, true); // true = Little Endian
                 const rrMs = (rawRR / 1024.0) * 1000.0;
                 rrBuffer.push(rrMs);
-                
+
                 // Actualizar la UI localmente
-                processRmssd(rrMs); 
-                
+                processRmssd(rrMs);
+
                 offset += 2;
             }
         }
-    
+
         // 3. Enviar al Backend (Flask) en lotes para no saturar los WebSockets
         if (rrBuffer.length >= 5) {
             socket.emit('rr_data', { rr_intervals: rrBuffer });
