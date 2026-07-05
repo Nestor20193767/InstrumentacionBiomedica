@@ -17,41 +17,43 @@
             --ss-card: #FFFFFF;
             --ss-text: #1E1B4B;
             --ss-muted: #6B7280;
+            --ss-border: #E0E7FF;
+        }
+        body[data-theme="dark"] {
+            --ss-bg: #0F0E17;
+            --ss-card: #1A1830;
+            --ss-text: #E0E7FF;
+            --ss-muted: #9CA3AF;
+            --ss-border: #2D2B50;
         }
 
         * { box-sizing: border-box; }
-
         body {
             background-color: var(--ss-bg);
             font-family: 'Segoe UI', system-ui, sans-serif;
             color: var(--ss-text);
             padding-bottom: 72px;
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* ── TOPBAR ── */
         .topbar {
             background: var(--ss-card);
-            border-bottom: 1px solid #E0E7FF;
+            border-bottom: 1px solid var(--ss-border);
             padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 900;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 900;
         }
         .topbar .brand { font-weight: 800; color: var(--ss-primary); font-size: 1.15rem; letter-spacing: -0.5px; }
-        .topbar .brand i { margin-right: 4px; }
         .streak-badge { background: #FEF3C7; color: #92400E; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700; }
 
         /* ── BOTTOM NAV ── */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
             background: var(--ss-card);
-            box-shadow: 0 -1px 0 #E0E7FF, 0 -4px 16px rgba(79,70,229,0.06);
-            z-index: 1000;
-            display: flex;
+            box-shadow: 0 -1px 0 var(--ss-border), 0 -4px 16px rgba(79,70,229,0.06);
+            z-index: 1000; display: flex;
         }
         .bottom-nav a {
             flex: 1; text-align: center; padding: 8px 0;
@@ -64,188 +66,226 @@
         /* ── MICRO-FRONTENDS ── */
         .micro-frontend { display: none; }
         .micro-frontend.active { display: block; animation: fadeIn 0.25s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
         /* ── CARDS ── */
         .ss-card {
             background: var(--ss-card);
-            border-radius: 16px;
-            padding: 18px;
+            border-radius: 16px; padding: 18px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(79,70,229,0.07);
-            margin-bottom: 14px;
-            border: none;
+            margin-bottom: 14px; border: none;
         }
 
-        /* ── ONBOARDING / FLOW ── */
+        /* ── ONBOARDING FLOW ── */
         .flow-screen { display: none; }
         .flow-screen.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* Step indicators */
-        .step-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
-        .step-dot { width: 8px; height: 8px; border-radius: 50%; background: #C7D2FE; transition: all 0.3s; }
-        .step-dot.active { background: var(--ss-primary); width: 22px; border-radius: 4px; }
-        .step-dot.done { background: var(--ss-accent); }
+        .step-dots { display:flex; justify-content:center; gap:6px; margin-bottom:20px; }
+        .step-dot { width:8px; height:8px; border-radius:50%; background:#C7D2FE; transition:all 0.3s; }
+        .step-dot.active { background:var(--ss-primary); width:22px; border-radius:4px; }
+        .step-dot.done { background:var(--ss-accent); }
 
-        /* Electrode tutorial */
         .electrode-diagram {
-            position: relative; width: 160px; height: 160px;
-            border-radius: 50%; background: #EEF2FF;
-            border: 2px dashed #C7D2FE;
-            margin: 0 auto 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3.5rem;
+            position:relative; width:160px; height:160px;
+            border-radius:50%; background:#EEF2FF;
+            border:2px dashed #C7D2FE;
+            margin:0 auto 16px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:3.5rem;
         }
         .electrode-pin {
-            position: absolute; background: var(--ss-primary);
-            color: white; border-radius: 50%; width: 34px; height: 34px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.65rem; font-weight: 800; box-shadow: 0 2px 8px rgba(79,70,229,0.4);
+            position:absolute; border-radius:50%;
+            width:34px; height:34px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.65rem; font-weight:800; color:white;
+            box-shadow:0 2px 8px rgba(79,70,229,0.4);
         }
-        .electrode-pin.ra { top: 10px; left: 15px; }
-        .electrode-pin.la { top: 10px; right: 15px; background: var(--ss-accent); }
-        .electrode-pin.ll { bottom: 10px; left: 50%; transform: translateX(-50%); background: var(--ss-warn); color: #1E1B4B; }
+        .electrode-pin.ra { top:10px; left:15px; background:var(--ss-primary); }
+        .electrode-pin.la { top:10px; right:15px; background:var(--ss-accent); }
+        .electrode-pin.ll { bottom:10px; left:50%; transform:translateX(-50%); background:var(--ss-warn); color:#1E1B4B; }
 
-        /* Signal quality bar */
-        .signal-quality-wrap { background: #EEF2FF; border-radius: 10px; height: 12px; overflow: hidden; }
-        .signal-quality-bar { height: 100%; border-radius: 10px; transition: width 0.8s ease, background 0.5s; }
+        .signal-quality-wrap { background:#EEF2FF; border-radius:10px; height:12px; overflow:hidden; }
+        .signal-quality-bar  { height:100%; border-radius:10px; transition:width 0.8s ease, background 0.5s; }
 
-        /* ECG wave canvas */
-        #ecg-canvas { border-radius: 12px; background: #0F0E17; display: block; }
+        #ecg-canvas, #rmssd-canvas { border-radius:12px; background:#0F0E17; display:block; }
 
-        /* RMSSD trend chart placeholder */
-        #rmssd-canvas { border-radius: 12px; background: #0F0E17; display: block; }
-
-        /* Stress level indicator */
         .stress-ring {
-            width: 110px; height: 110px; border-radius: 50%;
-            border: 8px solid #EEF2FF;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            margin: 0 auto;
-            position: relative;
-            transition: border-color 0.5s;
+            width:110px; height:110px; border-radius:50%;
+            border:8px solid #EEF2FF;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            margin:0 auto; transition:border-color 0.5s;
         }
-        .stress-ring .stress-val { font-size: 1.5rem; font-weight: 800; line-height: 1; }
-        .stress-ring .stress-lbl { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ss-muted); }
+        .stress-ring .stress-val { font-size:1.5rem; font-weight:800; line-height:1; }
+        .stress-ring .stress-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ss-muted); }
 
-        /* EVA slider */
-        .eva-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; outline: none; background: linear-gradient(to right, #4F46E5, #EF4444); }
-        .eva-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: white; border: 3px solid var(--ss-primary); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .eva-value { font-size: 2.5rem; font-weight: 800; color: var(--ss-primary); text-align: center; }
+        .eva-slider { -webkit-appearance:none; width:100%; height:8px; border-radius:4px; outline:none; background:linear-gradient(to right,#4F46E5,#EF4444); }
+        .eva-slider::-webkit-slider-thumb { -webkit-appearance:none; width:28px; height:28px; border-radius:50%; background:white; border:3px solid var(--ss-primary); cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+        .eva-value { font-size:2.5rem; font-weight:800; color:var(--ss-primary); text-align:center; }
 
-        /* Baseline countdown */
-        .baseline-countdown { font-size: 3rem; font-weight: 900; color: var(--ss-primary); text-align: center; line-height: 1; }
-        .baseline-ring { width: 140px; height: 140px; margin: 0 auto; position: relative; }
-        .baseline-ring svg { transform: rotate(-90deg); }
-        .baseline-ring .ring-label {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .baseline-countdown { font-size:3rem; font-weight:900; color:var(--ss-primary); text-align:center; line-height:1; }
+        .baseline-ring { width:140px; height:140px; margin:0 auto; position:relative; }
+        .baseline-ring svg { transform:rotate(-90deg); }
+        .baseline-ring .ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 
-        /* Metrics row */
         .metric-card {
-            background: var(--ss-card); border-radius: 14px; padding: 14px 10px; text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            background:var(--ss-card); border-radius:14px; padding:14px 10px; text-align:center;
+            box-shadow:0 1px 3px rgba(0,0,0,0.06);
         }
-        .metric-card .val { font-size: 1.4rem; font-weight: 800; color: var(--ss-primary); }
-        .metric-card .unit { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ss-muted); }
+        .metric-card .val { font-size:1.4rem; font-weight:800; color:var(--ss-primary); }
+        .metric-card .unit { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ss-muted); }
 
-        /* Notification toast (rest alert) */
         #rest-toast {
-            position: fixed; bottom: 84px; left: 12px; right: 12px;
-            background: white; border-radius: 16px; padding: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            z-index: 2000; display: none;
-            border-left: 4px solid var(--ss-danger);
-            animation: slideUp 0.4s ease;
+            position:fixed; bottom:84px; left:12px; right:12px;
+            background:var(--ss-card); border-radius:16px; padding:16px;
+            box-shadow:0 8px 24px rgba(0,0,0,0.15);
+            z-index:2000; display:none;
+            border-left:4px solid var(--ss-danger);
+            animation:slideUp 0.4s ease;
         }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
 
-        /* Trophy */
-        .trophy-icon { color: #F59E0B; font-size: 1.8rem; }
+        /* ── LEADERBOARD ── */
+        .lb-row { display:flex; align-items:center; padding:12px 0; border-bottom:1px solid var(--ss-border); }
+        .lb-rank { font-size:1.1rem; font-weight:800; width:28px; color:var(--ss-muted); }
+        .lb-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; margin-right:10px; }
+        .lb-name { flex:1; font-weight:600; font-size:0.9rem; }
+        .lb-pts { font-weight:700; color:var(--ss-primary); font-size:0.9rem; }
+        .lb-row.me { background:#EEF2FF; border-radius:10px; padding-left:8px; }
 
-        /* Leaderboard */
-        .lb-row { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #EEF2FF; }
-        .lb-rank { font-size: 1.1rem; font-weight: 800; width: 28px; color: var(--ss-muted); }
-        .lb-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; margin-right: 10px; }
-        .lb-name { flex: 1; font-weight: 600; font-size: 0.9rem; }
-        .lb-pts { font-weight: 700; color: var(--ss-primary); font-size: 0.9rem; }
-        .lb-row.me { background: #EEF2FF; border-radius: 10px; padding-left: 8px; }
+        /* ── SALAS ── */
+        .room-timer { font-size:2.8rem; font-weight:900; color:var(--ss-primary); text-align:center; font-variant-numeric:tabular-nums; }
 
-        /* Rooms */
-        .room-card { border-radius: 14px; background: var(--ss-card); padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-        .room-timer { font-size: 2.8rem; font-weight: 900; color: var(--ss-primary); text-align: center; font-variant-numeric: tabular-nums; }
+        /* Código de sala destacado */
+        .room-code-display {
+            font-size:2.2rem; font-weight:900; letter-spacing:0.18em;
+            color:var(--ss-primary); text-align:center;
+            background:#EEF2FF; border-radius:14px; padding:14px;
+            cursor:pointer; user-select:all; transition:background 0.2s;
+        }
+        .room-code-display:active { background:#C7D2FE; }
 
-        /* Primary btn */
+        /* Peers en sala */
+        .peer-row {
+            display:flex; align-items:center; gap:10px;
+            padding:10px 0; border-bottom:1px solid var(--ss-border);
+        }
+        .peer-row:last-child { border:none; }
+        .peer-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+        .peer-name { flex:1; font-size:0.88rem; font-weight:600; }
+        .stress-pill {
+            font-size:0.7rem; font-weight:700; border-radius:20px; padding:3px 10px;
+        }
+        .stress-pill.normal   { background:#DCFCE7; color:#166534; }
+        .stress-pill.moderado { background:#FEF3C7; color:#92400E; }
+        .stress-pill.elevado  { background:#FEE2E2; color:#991B1B; }
+        .stress-pill.sin-dato { background:#F3F4F6; color:#6B7280; }
+
+        /* ── PERFIL ── */
+        .profile-avatar-wrap {
+            width:80px; height:80px; border-radius:50%; overflow:hidden;
+            border:3px solid var(--ss-primary); margin:0 auto 8px; cursor:pointer;
+        }
+        .profile-avatar-wrap img { width:100%; height:100%; object-fit:cover; }
+        .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .stat-box {
+            background:var(--ss-bg); border-radius:12px; padding:14px; text-align:center;
+            border:1px solid var(--ss-border);
+        }
+        .stat-box .sv { font-size:1.5rem; font-weight:800; color:var(--ss-primary); }
+        .stat-box .sl { font-size:0.68rem; text-transform:uppercase; letter-spacing:0.07em; color:var(--ss-muted); }
+
+        .achievement-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .achievement {
+            background:var(--ss-bg); border-radius:12px; padding:12px 6px; text-align:center;
+            border:1px solid var(--ss-border);
+        }
+        .achievement.locked { opacity:0.4; }
+        .achievement .ach-icon { font-size:1.8rem; }
+        .achievement .ach-label { font-size:0.68rem; font-weight:700; margin-top:4px; }
+
+        /* Config toggle */
+        .config-row {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 0; border-bottom:1px solid var(--ss-border);
+        }
+        .config-row:last-child { border:none; }
+        .config-label { font-size:0.88rem; font-weight:600; }
+        .config-sub   { font-size:0.72rem; color:var(--ss-muted); }
+
+        /* ── BOTONES ── */
         .btn-ss {
-            background: var(--ss-primary); color: white; border: none;
-            border-radius: 12px; padding: 12px 20px; font-weight: 700; width: 100%;
-            font-size: 0.95rem; transition: opacity 0.2s;
+            background:var(--ss-primary); color:white; border:none;
+            border-radius:12px; padding:12px 20px; font-weight:700; width:100%;
+            font-size:0.95rem; transition:opacity 0.2s; cursor:pointer;
         }
-        .btn-ss:hover { opacity: 0.9; color: white; }
+        .btn-ss:hover { opacity:0.9; color:white; }
+        .btn-ss:disabled { opacity:0.4; cursor:not-allowed; }
         .btn-ss-outline {
-            background: transparent; color: var(--ss-primary);
-            border: 2px solid var(--ss-primary); border-radius: 12px;
-            padding: 11px 20px; font-weight: 700; width: 100%; font-size: 0.95rem;
+            background:transparent; color:var(--ss-primary);
+            border:2px solid var(--ss-primary); border-radius:12px;
+            padding:11px 20px; font-weight:700; width:100%; font-size:0.95rem;
+            cursor:pointer;
         }
-        .btn-ss-accent { background: var(--ss-accent); }
-        .btn-ss-warn { background: var(--ss-warn); color: #1E1B4B; }
+        .btn-ss-accent { background:var(--ss-accent); }
+        .btn-ss-warn   { background:var(--ss-warn); color:#1E1B4B; }
+        .btn-ss-danger { background:var(--ss-danger); }
 
-        /* Section title */
-        .sec-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ss-muted); font-weight: 700; margin-bottom: 10px; }
+        .sec-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--ss-muted); font-weight:700; margin-bottom:10px; }
 
-        /* Confetti / session end */
-        .ies-score { font-size: 4rem; font-weight: 900; color: var(--ss-primary); text-align: center; }
-        .xp-badge { display: inline-block; background: #FEF3C7; color: #92400E; border-radius: 20px; padding: 6px 16px; font-weight: 800; font-size: 0.9rem; }
+        .ies-score { font-size:4rem; font-weight:900; color:var(--ss-primary); text-align:center; }
+        .xp-badge  { display:inline-block; background:#FEF3C7; color:#92400E; border-radius:20px; padding:6px 16px; font-weight:800; font-size:0.9rem; }
+
+        /* Toast de sistema (salas) */
+        #sys-toast {
+            position:fixed; top:70px; left:50%; transform:translateX(-50%);
+            background:var(--ss-text); color:var(--ss-card);
+            border-radius:20px; padding:8px 18px; font-size:0.82rem;
+            z-index:3000; display:none; white-space:nowrap;
+            box-shadow:0 4px 16px rgba(0,0,0,0.18);
+        }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════
-         TOPBAR
-    ════════════════════════════════════════════ -->
+    <!-- ═══════════ TOPBAR ═══════════ -->
     <div class="topbar">
         <span class="brand"><i class="bi bi-activity"></i>StudySync</span>
         <div class="d-flex align-items-center gap-2">
-            <span class="streak-badge"><i class="bi bi-fire"></i> 5 días</span>
-            <img src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff" class="rounded-circle" width="32" alt="Perfil">
+            <span class="streak-badge" id="topbar-streak"><i class="bi bi-fire"></i> 5 días</span>
+            <img id="topbar-avatar"
+                src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff"
+                class="rounded-circle" width="32" alt="Perfil"
+                onclick="switchTab('profile-app', document.querySelector('[data-tab=profile]'))">
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         DASHBOARD MICRO-FRONTEND (active)
-    ════════════════════════════════════════════ -->
+    <!-- ═══════════ DASHBOARD ═══════════ -->
     <div id="dashboard-app" class="micro-frontend active p-3">
 
-        <!-- ── FLOW: STEP 1 — Tutorial electrodos ── -->
+        <!-- STEP 1: Tutorial -->
         <div id="flow-tutorial" class="flow-screen active">
             <div class="step-dots">
-                <div class="step-dot active" id="dot-1"></div>
-                <div class="step-dot" id="dot-2"></div>
-                <div class="step-dot" id="dot-3"></div>
-                <div class="step-dot" id="dot-4"></div>
-                <div class="step-dot" id="dot-5"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div><div class="step-dot"></div>
+                <div class="step-dot"></div><div class="step-dot"></div>
             </div>
-
             <div class="ss-card text-center">
                 <p class="sec-title">Paso 1 — Preparación</p>
                 <h5 class="fw-bold mb-1">Coloca los 3 electrodos</h5>
-                <p class="text-muted small mb-4">Sigue el diagrama para un ECG preciso. La piel debe estar limpia y seca.</p>
-
-                <div class="electrode-diagram">
-                    🫀
+                <p class="text-muted small mb-4">Piel limpia y seca para un ECG preciso.</p>
+                <div class="electrode-diagram">🫀
                     <div class="electrode-pin ra">RA</div>
                     <div class="electrode-pin la">LA</div>
                     <div class="electrode-pin ll">LL</div>
                 </div>
-
-                <div class="text-start mt-3">
+                <div class="text-start mt-2">
                     <div class="d-flex align-items-center mb-2 gap-2">
                         <div class="electrode-pin position-static" style="background:var(--ss-primary);min-width:28px;height:28px;font-size:0.6rem">RA</div>
-                        <small><strong>Brazo Derecho</strong> — muñeca o parte superior del brazo</small>
+                        <small><strong>Brazo Derecho</strong> — muñeca o parte superior</small>
                     </div>
                     <div class="d-flex align-items-center mb-2 gap-2">
                         <div class="electrode-pin position-static" style="background:var(--ss-accent);min-width:28px;height:28px;font-size:0.6rem">LA</div>
-                        <small><strong>Brazo Izquierdo</strong> — muñeca o parte superior del brazo</small>
+                        <small><strong>Brazo Izquierdo</strong> — muñeca o parte superior</small>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <div class="electrode-pin position-static" style="background:var(--ss-warn);color:#1E1B4B;min-width:28px;height:28px;font-size:0.6rem">LL</div>
@@ -253,7 +293,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="ss-card">
                 <p class="sec-title mb-2">Conectar dispositivo</p>
                 <button class="btn-ss" id="btn-bluetooth" onclick="connectBluetooth()">
@@ -263,501 +302,603 @@
                     <i class="bi bi-x-circle"></i> Dispositivo no conectado
                 </small>
             </div>
-
-            <button class="btn-ss-outline" onclick="goToStep('flow-signal')">
-                Continuar →
-            </button>
+            <button class="btn-ss-outline" onclick="goToStep('flow-signal')">Continuar →</button>
         </div>
 
-        <!-- ── FLOW: STEP 2 — Validación de señal ── -->
+        <!-- STEP 2: Validación señal -->
         <div id="flow-signal" class="flow-screen">
             <div class="step-dots">
-                <div class="step-dot done" id="dot-1b"></div>
-                <div class="step-dot active"></div>
-                <div class="step-dot"></div>
-                <div class="step-dot"></div>
-                <div class="step-dot"></div>
+                <div class="step-dot done"></div><div class="step-dot active"></div>
+                <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
             </div>
-
             <div class="ss-card text-center">
                 <p class="sec-title">Paso 2 — Validación</p>
                 <h5 class="fw-bold mb-1">Calidad de la señal ECG</h5>
-                <p class="text-muted small mb-3">Mantente quieto mientras verificamos la señal. El sistema filtra la línea base (0.5 Hz), ruido de alta frecuencia y 60 Hz.</p>
-
-                <!-- Live ECG canvas -->
-                <canvas id="ecg-canvas" width="100%" height="80" style="width:100%;height:80px;"></canvas>
-
+                <p class="text-muted small mb-3">Mantente quieto mientras verificamos la señal.</p>
+                <canvas id="ecg-canvas" width="320" height="80" style="width:100%;height:80px;"></canvas>
                 <div class="mt-3 mb-1 d-flex justify-content-between small text-muted">
-                    <span>Calidad de señal</span>
-                    <span id="signal-pct">--</span>
+                    <span>Calidad</span><span id="signal-pct">--</span>
                 </div>
                 <div class="signal-quality-wrap mb-3">
                     <div class="signal-quality-bar bg-secondary" id="signal-bar" style="width:0%"></div>
                 </div>
                 <div id="signal-msg" class="small text-muted"><i class="bi bi-hourglass-split"></i> Analizando...</div>
             </div>
-
             <div class="ss-card">
-                <p class="sec-title mb-1">Verificaciones del sistema</p>
+                <p class="sec-title mb-1">Verificaciones</p>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <small>Filtro pasa-altas 0.5 Hz</small>
-                    <i class="bi bi-check-circle-fill text-success" id="chk-hp"></i>
+                    <i class="bi bi-check-circle-fill text-success"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <small>Filtro pasa-bajas</small>
-                    <i class="bi bi-check-circle-fill text-success" id="chk-lp"></i>
+                    <i class="bi bi-check-circle-fill text-success"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <small>Filtro notch 60 Hz</small>
-                    <i class="bi bi-check-circle-fill text-success" id="chk-notch"></i>
+                    <i class="bi bi-check-circle-fill text-success"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <small>Detección de picos R (≥250 Hz)</small>
-                    <i class="bi bi-check-circle-fill text-success" id="chk-r"></i>
+                    <small>Detección picos R (≥250 Hz)</small>
+                    <i class="bi bi-check-circle-fill text-success"></i>
                 </div>
             </div>
-
             <button class="btn-ss" id="btn-signal-next" onclick="goToStep('flow-warnings')" disabled>
                 Señal verificada — Continuar →
             </button>
         </div>
 
-        <!-- ── FLOW: STEP 3 — Advertencias y EVA ── -->
+        <!-- STEP 3: Advertencias + EVA -->
         <div id="flow-warnings" class="flow-screen">
             <div class="step-dots">
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
-                <div class="step-dot active"></div>
-                <div class="step-dot"></div>
-                <div class="step-dot"></div>
+                <div class="step-dot done"></div><div class="step-dot done"></div>
+                <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
             </div>
-
             <div class="ss-card">
                 <p class="sec-title">Paso 3 — Contexto</p>
                 <h5 class="fw-bold mb-3">Factores que afectan el HRV</h5>
-
-                <p class="small text-muted mb-3">Estos factores pueden alterar tu RMSSD basal. Infórmalos para que el sistema los considere.</p>
-
                 <div class="d-flex align-items-center p-2 mb-2 rounded" style="background:#FEF3C7">
                     <i class="bi bi-cup-hot me-2" style="color:#92400E;font-size:1.2rem"></i>
-                    <div>
-                        <div class="fw-semibold small">Cafeína</div>
-                        <div class="text-muted" style="font-size:0.72rem">¿Tomaste café/energizante en las últimas 4 h?</div>
-                    </div>
-                    <div class="ms-auto">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="chk-caffeine">
-                        </div>
-                    </div>
+                    <div><div class="fw-semibold small">Cafeína</div><div class="text-muted" style="font-size:0.72rem">¿Tomaste café/energizante en las últimas 4 h?</div></div>
+                    <div class="ms-auto"><div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" id="chk-caffeine"></div></div>
                 </div>
-
                 <div class="d-flex align-items-center p-2 mb-2 rounded" style="background:#EEF2FF">
                     <i class="bi bi-moon-stars me-2" style="color:#4F46E5;font-size:1.2rem"></i>
-                    <div>
-                        <div class="fw-semibold small">Sueño deficiente</div>
-                        <div class="text-muted" style="font-size:0.72rem">¿Dormiste menos de 6 horas?</div>
-                    </div>
-                    <div class="ms-auto">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="chk-sleep">
-                        </div>
-                    </div>
+                    <div><div class="fw-semibold small">Sueño deficiente</div><div class="text-muted" style="font-size:0.72rem">¿Dormiste menos de 6 horas?</div></div>
+                    <div class="ms-auto"><div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" id="chk-sleep"></div></div>
                 </div>
-
                 <div class="d-flex align-items-center p-2 rounded" style="background:#ECFDF5">
                     <i class="bi bi-bicycle me-2" style="color:#10B981;font-size:1.2rem"></i>
-                    <div>
-                        <div class="fw-semibold small">Ejercicio reciente</div>
-                        <div class="text-muted" style="font-size:0.72rem">¿Hiciste ejercicio en las últimas 2 h?</div>
-                    </div>
-                    <div class="ms-auto">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="chk-exercise">
-                        </div>
-                    </div>
+                    <div><div class="fw-semibold small">Ejercicio reciente</div><div class="text-muted" style="font-size:0.72rem">¿Hiciste ejercicio en las últimas 2 h?</div></div>
+                    <div class="ms-auto"><div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" id="chk-exercise"></div></div>
                 </div>
             </div>
-
             <div class="ss-card">
                 <p class="sec-title">Escala Visual Analógica — EVA</p>
                 <h6 class="fw-bold mb-1">¿Cómo sientes tu estrés ahora mismo?</h6>
-                <p class="text-muted small mb-3">Mueve el control de 0 (sin estrés) a 10 (estrés máximo).</p>
-
+                <p class="text-muted small mb-2">0 = Sin estrés · 10 = Estrés máximo</p>
                 <div class="eva-value" id="eva-display">5</div>
                 <div class="d-flex justify-content-between small text-muted mb-2">
-                    <span>Sin estrés</span><span>Estrés máximo</span>
+                    <span>Sin estrés</span><span>Máximo</span>
                 </div>
                 <input type="range" class="eva-slider" id="eva-slider" min="0" max="10" value="5"
-                    oninput="document.getElementById('eva-display').innerText = this.value">
+                    oninput="document.getElementById('eva-display').innerText=this.value">
             </div>
-
-            <button class="btn-ss" onclick="startBaseline()">
-                Iniciar captura de línea base →
-            </button>
+            <button class="btn-ss" onclick="startBaseline()">Iniciar captura de línea base →</button>
         </div>
 
-        <!-- ── FLOW: STEP 4 — Baseline capture ── -->
+        <!-- STEP 4: Baseline -->
         <div id="flow-baseline" class="flow-screen">
             <div class="step-dots">
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
-                <div class="step-dot active"></div>
-                <div class="step-dot"></div>
+                <div class="step-dot done"></div><div class="step-dot done"></div>
+                <div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div>
             </div>
-
             <div class="ss-card text-center">
                 <p class="sec-title">Paso 4 — Línea Base</p>
                 <h5 class="fw-bold mb-1">Capturando RMSSD basal</h5>
-                <p class="text-muted small mb-4">Relájate y quédate quieto. El sistema necesita 5 minutos de señal válida para establecer tu referencia.</p>
-
-                <!-- Circular progress ring -->
+                <p class="text-muted small mb-4">Relájate 5 minutos para establecer tu referencia.</p>
                 <div class="baseline-ring">
                     <svg width="140" height="140" viewBox="0 0 140 140">
                         <circle cx="70" cy="70" r="58" fill="none" stroke="#EEF2FF" stroke-width="12"/>
                         <circle cx="70" cy="70" r="58" fill="none" stroke="#4F46E5" stroke-width="12"
                             stroke-dasharray="364.4" stroke-dashoffset="364.4"
                             stroke-linecap="round" id="baseline-ring-circle"
-                            style="transition: stroke-dashoffset 1s linear;"/>
+                            style="transition:stroke-dashoffset 1s linear;"/>
                     </svg>
                     <div class="ring-label">
                         <div class="baseline-countdown" id="baseline-timer">5:00</div>
                         <div class="text-muted" style="font-size:0.7rem">restantes</div>
                     </div>
                 </div>
-
-                <div class="mt-3 small text-muted">
-                    RMSSD actual: <strong id="rmssd-live">--</strong> ms
-                </div>
+                <div class="mt-3 small text-muted">RMSSD actual: <strong id="rmssd-live">--</strong> ms</div>
             </div>
-
             <div class="ss-card">
-                <canvas id="rmssd-canvas" width="100%" height="80" style="width:100%;height:80px;"></canvas>
+                <canvas id="rmssd-canvas" width="320" height="80" style="width:100%;height:80px;"></canvas>
                 <p class="text-center text-muted small mt-2 mb-0">Curva RMSSD en tiempo real</p>
             </div>
-
             <button class="btn-ss btn-ss-accent" id="btn-baseline-done" onclick="goToStep('flow-dashboard')" disabled>
                 <i class="bi bi-hourglass-split me-1"></i> Capturando baseline...
             </button>
         </div>
 
-        <!-- ── FLOW: STEP 5 — DASHBOARD PRINCIPAL ── -->
+        <!-- STEP 5: Dashboard principal -->
         <div id="flow-dashboard" class="flow-screen">
             <div class="step-dots">
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
-                <div class="step-dot done"></div>
+                <div class="step-dot done"></div><div class="step-dot done"></div>
+                <div class="step-dot done"></div><div class="step-dot done"></div>
                 <div class="step-dot active"></div>
             </div>
-
-            <!-- Stress ring + RMSSD metrics -->
             <div class="ss-card">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <p class="sec-title mb-0">Monitor en tiempo real</p>
-                        <h6 class="fw-bold">Carga Autonómica HRV</h6>
-                    </div>
-                    <span id="stress-level-badge" class="badge rounded-pill" style="background:#DCFCE7;color:#166534;font-size:0.75rem">
-                        ● Normal
-                    </span>
+                    <div><p class="sec-title mb-0">Monitor en tiempo real</p><h6 class="fw-bold">Carga Autonómica HRV</h6></div>
+                    <span id="stress-level-badge" class="badge rounded-pill" style="background:#DCFCE7;color:#166534">● Normal</span>
                 </div>
-
                 <div class="stress-ring" id="stress-ring" style="border-color:#10B981">
                     <div class="stress-val" id="stress-val" style="color:#10B981">--</div>
                     <div class="stress-lbl">RMSSD ms</div>
                 </div>
-
                 <div class="row g-2 mt-3">
-                    <div class="col-4">
-                        <div class="metric-card">
-                            <div class="val" id="metric-variation">--</div>
-                            <div class="unit">% variación</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="metric-card">
-                            <div class="val" id="metric-hr">--</div>
-                            <div class="unit">bpm</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="metric-card">
-                            <div class="val" id="metric-window">0</div>
-                            <div class="unit">ventanas</div>
-                        </div>
-                    </div>
+                    <div class="col-4"><div class="metric-card"><div class="val" id="metric-variation">--</div><div class="unit">% variación</div></div></div>
+                    <div class="col-4"><div class="metric-card"><div class="val" id="metric-hr">--</div><div class="unit">bpm</div></div></div>
+                    <div class="col-4"><div class="metric-card"><div class="val" id="metric-window">0</div><div class="unit">ventanas</div></div></div>
                 </div>
             </div>
-
-            <!-- ECG live -->
             <div class="ss-card">
                 <p class="sec-title">Señal ECG en vivo</p>
-                <canvas id="ecg-canvas-2" width="100%" height="80" style="width:100%;height:80px;"></canvas>
+                <canvas id="ecg-canvas-2" width="320" height="80" style="width:100%;height:80px;"></canvas>
             </div>
-
-            <!-- RMSSD trend -->
             <div class="ss-card">
                 <p class="sec-title">Evolución RMSSD (sesión)</p>
-                <canvas id="rmssd-canvas-2" width="100%" height="80" style="width:100%;height:80px;"></canvas>
+                <canvas id="rmssd-canvas-2" width="320" height="80" style="width:100%;height:80px;"></canvas>
                 <div class="d-flex justify-content-between small text-muted mt-1">
                     <span>Inicio</span>
-                    <span>Baseline: <strong id="baseline-ref">-- ms</strong></span>
+                    <span>Baseline: <strong id="baseline-ref">--</strong></span>
                     <span>Ahora</span>
                 </div>
             </div>
-
-            <!-- Session info -->
-            <div class="row g-2">
-                <div class="col-6">
-                    <div class="metric-card">
-                        <div class="val" id="session-time">00:00</div>
-                        <div class="unit">tiempo sesión</div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="metric-card">
-                        <div class="val" id="effective-time">00:00</div>
-                        <div class="unit">T. efectivo</div>
-                    </div>
-                </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6"><div class="metric-card"><div class="val" id="session-time">00:00</div><div class="unit">tiempo sesión</div></div></div>
+                <div class="col-6"><div class="metric-card"><div class="val" id="effective-time">00:00</div><div class="unit">T. efectivo</div></div></div>
             </div>
-
-            <div class="mt-3">
-                <button class="btn-ss-outline" onclick="endSession()">
-                    <i class="bi bi-stop-circle me-1"></i> Finalizar sesión
-                </button>
-            </div>
+            <button class="btn-ss-outline" onclick="endSession()"><i class="bi bi-stop-circle me-1"></i> Finalizar sesión</button>
         </div>
 
-        <!-- ── FLOW: STEP 6 — Resumen final ── -->
+        <!-- STEP 6: Resumen final -->
         <div id="flow-summary" class="flow-screen">
             <div class="ss-card text-center">
                 <div style="font-size:3rem">🎉</div>
                 <h5 class="fw-bold mt-1 mb-0">Sesión completada</h5>
-                <p class="text-muted small mb-3">Aquí está tu resumen de rendimiento cognitivo</p>
-
+                <p class="text-muted small mb-3">Resumen de rendimiento cognitivo</p>
                 <div class="ies-score" id="ies-score">--</div>
                 <p class="text-muted small mb-2">Índice de Estudio Saludable</p>
                 <span class="xp-badge" id="xp-badge">+-- XP</span>
             </div>
-
             <div class="ss-card">
-                <p class="sec-title">Desglose de la sesión</p>
-                <div class="d-flex justify-content-between mb-2">
-                    <small class="text-muted">Duración total</small>
-                    <strong id="sum-duration">--</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <small class="text-muted">T. efectivo (RMSSD &lt;30%)</small>
-                    <strong id="sum-effective">--</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <small class="text-muted">Fases de estrés elevado</small>
-                    <strong id="sum-stress-phases">--</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <small class="text-muted">Penalización (estrés sostenido)</small>
-                    <strong id="sum-penalty" class="text-danger">--</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <small class="text-muted">Bono — Descanso aceptado</small>
-                    <strong id="sum-bonus-rest" class="text-success">--</strong>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <small class="text-muted">Bono — Retorno al estudio</small>
-                    <strong id="sum-bonus-return" class="text-success">--</strong>
-                </div>
+                <p class="sec-title">Desglose</p>
+                <div class="d-flex justify-content-between mb-2"><small class="text-muted">Duración total</small><strong id="sum-duration">--</strong></div>
+                <div class="d-flex justify-content-between mb-2"><small class="text-muted">T. efectivo</small><strong id="sum-effective">--</strong></div>
+                <div class="d-flex justify-content-between mb-2"><small class="text-muted">Fases de estrés elevado</small><strong id="sum-stress-phases">--</strong></div>
+                <div class="d-flex justify-content-between mb-2"><small class="text-muted">Penalización</small><strong id="sum-penalty" class="text-danger">--</strong></div>
+                <div class="d-flex justify-content-between mb-2"><small class="text-muted">Bono descanso</small><strong id="sum-bonus-rest" class="text-success">--</strong></div>
+                <div class="d-flex justify-content-between"><small class="text-muted">Bono retorno</small><strong id="sum-bonus-return" class="text-success">--</strong></div>
             </div>
-
-            <div class="ss-card">
-                <p class="sec-title mb-2">Logros desbloqueados</p>
-                <div class="d-flex justify-content-around">
-                    <div class="text-center">
-                        <i class="bi bi-trophy-fill trophy-icon"></i>
-                        <p class="mb-0 small">Madrugador</p>
-                    </div>
-                    <div class="text-center">
-                        <i class="bi bi-award-fill trophy-icon" style="color:silver"></i>
-                        <p class="mb-0 small">Foco 2H</p>
-                    </div>
-                    <div class="text-center opacity-40">
-                        <i class="bi bi-star-fill trophy-icon" style="color:#d1d5db"></i>
-                        <p class="mb-0 small">Zen Master</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn-ss" onclick="newSession()">
-                <i class="bi bi-arrow-clockwise me-1"></i> Nueva sesión
-            </button>
+            <button class="btn-ss" onclick="newSession()"><i class="bi bi-arrow-clockwise me-1"></i> Nueva sesión</button>
         </div>
 
     </div><!-- /dashboard-app -->
 
-    <!-- ═══════════════════════════════════════════
-         LEADERBOARD MICRO-FRONTEND
-    ════════════════════════════════════════════ -->
+    <!-- ═══════════ LEADERBOARD ═══════════ -->
     <div id="leaderboard-app" class="micro-frontend p-3">
         <h5 class="fw-bold mb-1">Liga de Estudio</h5>
         <p class="text-muted small mb-3">Puntuaciones semanales basadas en el IES</p>
-
         <div class="ss-card">
-            <div class="lb-row">
-                <div class="lb-rank">🥇</div>
-                <img src="https://ui-avatars.com/api/?name=Paula&background=F59E0B&color=fff" class="lb-avatar">
-                <div class="lb-name">Paula</div>
-                <div class="lb-pts">450 pts</div>
-            </div>
-            <div class="lb-row me">
-                <div class="lb-rank">🥈</div>
-                <img src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff" class="lb-avatar">
-                <div class="lb-name">Tú <span class="badge" style="background:#EEF2FF;color:#4F46E5;font-size:0.65rem">tú</span></div>
-                <div class="lb-pts">320 pts</div>
-            </div>
-            <div class="lb-row">
-                <div class="lb-rank">🥉</div>
-                <img src="https://ui-avatars.com/api/?name=Oliver&background=10B981&color=fff" class="lb-avatar">
-                <div class="lb-name">Oliver</div>
-                <div class="lb-pts">290 pts</div>
-            </div>
-            <div class="lb-row">
-                <div class="lb-rank" style="font-size:0.9rem;color:#ccc">4</div>
-                <img src="https://ui-avatars.com/api/?name=Sofia&background=EF4444&color=fff" class="lb-avatar">
-                <div class="lb-name">Sofia</div>
-                <div class="lb-pts" style="color:var(--ss-muted)">210 pts</div>
-            </div>
-            <div class="lb-row" style="border:none">
-                <div class="lb-rank" style="font-size:0.9rem;color:#ccc">5</div>
-                <img src="https://ui-avatars.com/api/?name=Diego&background=6B7280&color=fff" class="lb-avatar">
-                <div class="lb-name">Diego</div>
-                <div class="lb-pts" style="color:var(--ss-muted)">180 pts</div>
-            </div>
-        </div>
-
-        <div class="ss-card">
-            <p class="sec-title">Tu perfil</p>
-            <div class="d-flex align-items-center gap-3">
-                <img src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff" class="rounded-circle" width="54">
-                <div>
-                    <div class="fw-bold">Mi cuenta</div>
-                    <div class="text-muted small">320 pts · Racha 5 días</div>
-                    <div class="mt-1">
-                        <span class="badge me-1" style="background:#EEF2FF;color:#4F46E5">Foco 2H</span>
-                        <span class="badge" style="background:#ECFDF5;color:#065F46">Madrugador</span>
-                    </div>
-                </div>
-            </div>
+            <div class="lb-row"><div class="lb-rank">🥇</div><img src="https://ui-avatars.com/api/?name=Paula&background=F59E0B&color=fff" class="lb-avatar"><div class="lb-name">Paula</div><div class="lb-pts">450 pts</div></div>
+            <div class="lb-row me"><div class="lb-rank">🥈</div><img id="lb-my-avatar" src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff" class="lb-avatar"><div class="lb-name" id="lb-my-name">Tú <span class="badge" style="background:#EEF2FF;color:#4F46E5;font-size:0.65rem">tú</span></div><div class="lb-pts" id="lb-my-pts">320 pts</div></div>
+            <div class="lb-row"><div class="lb-rank">🥉</div><img src="https://ui-avatars.com/api/?name=Oliver&background=10B981&color=fff" class="lb-avatar"><div class="lb-name">Oliver</div><div class="lb-pts">290 pts</div></div>
+            <div class="lb-row"><div class="lb-rank" style="font-size:0.9rem;color:#ccc">4</div><img src="https://ui-avatars.com/api/?name=Sofia&background=EF4444&color=fff" class="lb-avatar"><div class="lb-name">Sofia</div><div class="lb-pts" style="color:var(--ss-muted)">210 pts</div></div>
+            <div class="lb-row" style="border:none"><div class="lb-rank" style="font-size:0.9rem;color:#ccc">5</div><img src="https://ui-avatars.com/api/?name=Diego&background=6B7280&color=fff" class="lb-avatar"><div class="lb-name">Diego</div><div class="lb-pts" style="color:var(--ss-muted)">180 pts</div></div>
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         SALAS MICRO-FRONTEND
-    ════════════════════════════════════════════ -->
+    <!-- ═══════════ SALAS ═══════════ -->
     <div id="room-app" class="micro-frontend p-3">
         <h5 class="fw-bold mb-1">Salas en Vivo</h5>
         <p class="text-muted small mb-3">Estudia sincronizado con amigos</p>
 
-        <div class="ss-card" id="room-join-panel">
-            <label class="sec-title">Código de sala</label>
-            <div class="d-flex gap-2 mb-2">
-                <input type="text" class="form-control" id="room-code" placeholder="ej. SYNC42" style="border-radius:10px;border:1.5px solid #E0E7FF">
-                <button class="btn-ss" style="width:auto;padding:10px 18px" onclick="joinRoom()">Entrar</button>
+        <!-- Panel de entrada -->
+        <div id="room-entry-panel">
+
+            <!-- Crear sala -->
+            <div class="ss-card">
+                <p class="sec-title">Crear sala nueva</p>
+                <button class="btn-ss" onclick="createRoom()">
+                    <i class="bi bi-plus-circle me-1"></i> Crear sala
+                </button>
             </div>
-            <button class="btn-ss-outline mt-1" style="font-size:0.85rem" onclick="createRoom()">
-                <i class="bi bi-plus-circle me-1"></i> Crear nueva sala
-            </button>
+
+            <!-- Unirse a sala -->
+            <div class="ss-card">
+                <p class="sec-title">Unirse a sala existente</p>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control" id="room-code-input"
+                        placeholder="Código ej. AB3X7K"
+                        style="border-radius:10px;border:1.5px solid var(--ss-border);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;"
+                        oninput="this.value=this.value.toUpperCase()">
+                    <button class="btn-ss" style="width:auto;padding:10px 18px;" onclick="joinRoom()">Entrar</button>
+                </div>
+                <div id="room-error-msg" class="text-danger small mt-2" style="display:none"></div>
+            </div>
+
         </div>
 
-        <div id="active-room" class="d-none">
+        <!-- Sala creada: mostrar código para compartir -->
+        <div id="room-code-panel" class="d-none">
             <div class="ss-card text-center">
-                <p class="sec-title text-success"><i class="bi bi-broadcast me-1"></i> Sala activa</p>
+                <p class="sec-title">Sala creada ✓</p>
+                <p class="text-muted small mb-2">Comparte este código con tus compañeros</p>
+                <div class="room-code-display" id="room-code-display" onclick="copyRoomCode()" title="Toca para copiar">
+                    <span id="room-code-text">------</span>
+                </div>
+                <small class="text-muted d-block mt-2 mb-3"><i class="bi bi-clipboard"></i> Toca el código para copiarlo</small>
+                <div class="d-flex gap-2">
+                    <button class="btn-ss" style="flex:1" onclick="shareRoom()">
+                        <i class="bi bi-share me-1"></i> Compartir
+                    </button>
+                    <button class="btn-ss-outline" style="flex:1" onclick="copyRoomCode()">
+                        <i class="bi bi-clipboard me-1"></i> Copiar
+                    </button>
+                </div>
+            </div>
+            <div class="ss-card">
+                <p class="sec-title"><i class="bi bi-broadcast text-success me-1"></i> Sala activa</p>
                 <div class="room-timer" id="shared-timer">00:00</div>
-                <p class="text-muted small mb-2">Compañeros conectados: <strong id="peer-count">1</strong></p>
-                <div class="d-flex justify-content-center gap-2 mb-3" id="peer-list"></div>
-
-                <!-- Stress levels de peers -->
-                <div id="peer-stress-list"></div>
-
-                <button class="btn-ss-outline" style="color:#EF4444;border-color:#EF4444" onclick="leaveRoom()">
-                    Salir de la sala
+                <p class="text-muted small text-center mt-1 mb-3">
+                    <span id="peer-count">1</span> compañero(s) conectado(s)
+                </p>
+                <div id="peer-list">
+                    <p class="text-center text-muted small">Esperando que alguien se una...</p>
+                </div>
+                <button class="btn-ss btn-ss-danger mt-3" onclick="leaveRoom()">
+                    <i class="bi bi-box-arrow-right me-1"></i> Salir de la sala
                 </button>
             </div>
         </div>
+
+        <!-- Sala unida -->
+        <div id="room-joined-panel" class="d-none">
+            <div class="ss-card">
+                <p class="sec-title"><i class="bi bi-broadcast text-success me-1"></i> Sala activa — <span id="joined-code-display" class="text-primary fw-bold"></span></p>
+                <div class="room-timer" id="shared-timer-2">00:00</div>
+                <p class="text-muted small text-center mt-1 mb-3">
+                    <span id="peer-count-2">1</span> compañero(s) conectado(s)
+                </p>
+                <div id="peer-list-2"></div>
+                <button class="btn-ss btn-ss-danger mt-3" onclick="leaveRoom()">
+                    <i class="bi bi-box-arrow-right me-1"></i> Salir de la sala
+                </button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         TOAST — Alerta descanso
-    ════════════════════════════════════════════ -->
+    <!-- ═══════════ PERFIL ═══════════ -->
+    <div id="profile-app" class="micro-frontend p-3">
+
+        <!-- Identidad -->
+        <div class="ss-card text-center">
+            <div class="profile-avatar-wrap" onclick="changeAvatar()">
+                <img id="profile-avatar-img"
+                    src="https://ui-avatars.com/api/?name=Tu&background=4F46E5&color=fff&size=128"
+                    alt="Avatar">
+            </div>
+            <div class="d-flex align-items-center justify-content-center gap-2 mt-1">
+                <h5 class="fw-bold mb-0" id="profile-name-display">Mi nombre</h5>
+                <i class="bi bi-pencil-square text-muted" style="cursor:pointer;font-size:0.9rem" onclick="editName()"></i>
+            </div>
+            <p class="text-muted small mb-2" id="profile-email-display">usuario@correo.com</p>
+            <span class="streak-badge"><i class="bi bi-fire"></i> <span id="profile-streak">5</span> días de racha</span>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="ss-card">
+            <p class="sec-title">Estadísticas acumuladas</p>
+            <div class="stat-grid">
+                <div class="stat-box"><div class="sv" id="stat-sessions">0</div><div class="sl">Sesiones</div></div>
+                <div class="stat-box"><div class="sv" id="stat-xp">0</div><div class="sl">XP total</div></div>
+                <div class="stat-box"><div class="sv" id="stat-ies-avg">--</div><div class="sl">IES promedio</div></div>
+                <div class="stat-box"><div class="sv" id="stat-eff-time">0 min</div><div class="sl">T. efectivo total</div></div>
+            </div>
+        </div>
+
+        <!-- Logros -->
+        <div class="ss-card">
+            <p class="sec-title">Logros</p>
+            <div class="achievement-grid">
+                <div class="achievement" id="ach-madrugador">
+                    <div class="ach-icon">🏆</div>
+                    <div class="ach-label">Madrugador</div>
+                </div>
+                <div class="achievement" id="ach-foco">
+                    <div class="ach-icon">🥈</div>
+                    <div class="ach-label">Foco 2H</div>
+                </div>
+                <div class="achievement locked" id="ach-zen">
+                    <div class="ach-icon">⭐</div>
+                    <div class="ach-label">Zen Master</div>
+                </div>
+                <div class="achievement locked" id="ach-racha">
+                    <div class="ach-icon">🔥</div>
+                    <div class="ach-label">Racha 7d</div>
+                </div>
+                <div class="achievement locked" id="ach-social">
+                    <div class="ach-icon">👥</div>
+                    <div class="ach-label">Social</div>
+                </div>
+                <div class="achievement locked" id="ach-hrv">
+                    <div class="ach-icon">💚</div>
+                    <div class="ach-label">HRV Pro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuración -->
+        <div class="ss-card">
+            <p class="sec-title">Configuración</p>
+
+            <div class="config-row">
+                <div>
+                    <div class="config-label">Nombre de usuario</div>
+                    <div class="config-sub" id="cfg-name-sub">Mi nombre</div>
+                </div>
+                <button class="btn-ss-outline" style="width:auto;padding:6px 14px;font-size:0.8rem" onclick="editName()">Editar</button>
+            </div>
+
+            <div class="config-row">
+                <div>
+                    <div class="config-label">Umbral de alerta</div>
+                    <div class="config-sub">Sensibilidad de la alerta de estrés</div>
+                </div>
+                <select class="form-select" id="cfg-threshold" style="width:auto;border-radius:10px;border:1.5px solid var(--ss-border);font-size:0.82rem" onchange="saveConfig()">
+                    <option value="normal">Normal</option>
+                    <option value="sensible">Sensible</option>
+                </select>
+            </div>
+
+            <div class="config-row">
+                <div>
+                    <div class="config-label">Notificaciones de descanso</div>
+                    <div class="config-sub">Alertas cuando el estrés es elevado</div>
+                </div>
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="cfg-notifications" checked onchange="saveConfig()">
+                </div>
+            </div>
+
+            <div class="config-row">
+                <div>
+                    <div class="config-label">Tema oscuro</div>
+                    <div class="config-sub">Cambia la apariencia de la app</div>
+                </div>
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="cfg-dark" onchange="toggleTheme()">
+                </div>
+            </div>
+
+            <div class="config-row" style="border:none">
+                <div>
+                    <div class="config-label">Unidad de tiempo BLE</div>
+                    <div class="config-sub">Frecuencia de muestreo esperada del wearable</div>
+                </div>
+                <select class="form-select" id="cfg-sampling" style="width:auto;border-radius:10px;border:1.5px solid var(--ss-border);font-size:0.82rem" onchange="saveConfig()">
+                    <option value="250">250 Hz</option>
+                    <option value="500">500 Hz</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-ss btn-ss-danger" onclick="resetProfile()">
+            <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión / Resetear datos
+        </button>
+
+    </div><!-- /profile-app -->
+
+    <!-- ═══════════ TOAST DESCANSO ═══════════ -->
     <div id="rest-toast">
         <div class="d-flex align-items-start gap-2">
             <div style="font-size:1.6rem">⚠️</div>
             <div>
                 <div class="fw-bold">Tiempo de descanso</div>
-                <div class="text-muted small">Llevas más de 10 min con estrés elevado. Tu rendimiento cognitivo puede verse afectado.</div>
+                <div class="text-muted small">Llevas más de 10 min con estrés elevado.</div>
             </div>
         </div>
         <div class="d-flex gap-2 mt-3">
-            <button class="btn-ss btn-ss-accent" style="flex:1" onclick="acceptRest()">
-                ✓ Tomar descanso
-            </button>
-            <button class="btn-ss-outline" style="flex:1;font-size:0.8rem" onclick="dismissRest()">
-                Ignorar
-            </button>
+            <button class="btn-ss btn-ss-accent" style="flex:1" onclick="acceptRest()">✓ Tomar descanso</button>
+            <button class="btn-ss-outline" style="flex:1;font-size:0.8rem" onclick="dismissRest()">Ignorar</button>
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         BOTTOM NAV
-    ════════════════════════════════════════════ -->
+    <!-- Toast de sistema (mensajes de sala) -->
+    <div id="sys-toast"></div>
+
+    <!-- ═══════════ BOTTOM NAV ═══════════ -->
     <nav class="bottom-nav">
-        <a href="#" class="active" onclick="switchTab('dashboard-app', this)">
-            <i class="bi bi-house-door"></i>
-            Inicio
+        <a href="#" class="active" data-tab="dashboard" onclick="switchTab('dashboard-app',this)">
+            <i class="bi bi-house-door"></i>Inicio
         </a>
-        <a href="#" onclick="switchTab('leaderboard-app', this)">
-            <i class="bi bi-bar-chart-steps"></i>
-            Ranking
+        <a href="#" data-tab="leaderboard" onclick="switchTab('leaderboard-app',this)">
+            <i class="bi bi-bar-chart-steps"></i>Ranking
         </a>
-        <a href="#" onclick="switchTab('room-app', this)">
-            <i class="bi bi-people"></i>
-            Salas
+        <a href="#" data-tab="rooms" onclick="switchTab('room-app',this)">
+            <i class="bi bi-people"></i>Salas
+        </a>
+        <a href="#" data-tab="profile" onclick="switchTab('profile-app',this)">
+            <i class="bi bi-person-circle"></i>Perfil
         </a>
     </nav>
 
-    <!-- Socket.IO -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
     <script>
     // ================================================================
-    //  0. SOCKET.IO  (descomentar cuando Flask esté activo)
+    //  0. SOCKET.IO — conectar al servidor Flask
     // ================================================================
-    // const socket = io();
+    const socket = io({
+        transports: ['polling'], // Vital para que ngrok no rompa la conexión
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000,
+        timeout: 5000,
+    });
+
+    socket.on('connect', () => {
+        console.log('[WS] conectado:', socket.id);
+        showSysToast('✓ Servidor conectado');
+    });
+    socket.on('disconnect', (reason) => {
+        console.warn('[WS] desconectado:', reason);
+    });
+    socket.on('connect_error', (err) => {
+        console.error('[WS] error:', err.message);
+        showSysToast('⚠️ Sin conexión. Verifica que Flask corra en puerto 5000.');
+    });
 
     // ================================================================
-    //  1. NAVEGACIÓN ENTRE TABS
+    //  1. PERFIL — carga y persistencia en localStorage
+    // ================================================================
+    const PROFILE_KEY = 'studysync_profile';
+
+    function defaultProfile() {
+        return {
+            name: 'Mi nombre',
+            email: 'usuario@correo.com',
+            streak: 5,
+            sessions: 0,
+            xp: 0,
+            iesHistory: [],
+            effectiveMinutes: 0,
+            theme: 'light',
+            notifications: true,
+            threshold: 'normal',
+            sampling: '250',
+        };
+    }
+
+    function loadProfile() {
+        try {
+            return JSON.parse(localStorage.getItem(PROFILE_KEY)) || defaultProfile();
+        } catch { return defaultProfile(); }
+    }
+
+    function saveProfile(p) {
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+    }
+
+    function applyProfile(p) {
+        // Topbar
+        document.getElementById('topbar-avatar').src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4F46E5&color=fff`;
+        document.getElementById('topbar-streak').innerHTML =
+            `<i class="bi bi-fire"></i> ${p.streak} días`;
+
+        // Perfil tab
+        document.getElementById('profile-avatar-img').src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4F46E5&color=fff&size=128`;
+        document.getElementById('profile-name-display').innerText = p.name;
+        document.getElementById('profile-email-display').innerText = p.email;
+        document.getElementById('profile-streak').innerText = p.streak;
+
+        // Stats
+        document.getElementById('stat-sessions').innerText = p.sessions;
+        document.getElementById('stat-xp').innerText = p.xp;
+        const avgIes = p.iesHistory.length
+            ? Math.round(p.iesHistory.reduce((a,b)=>a+b,0)/p.iesHistory.length)
+            : '--';
+        document.getElementById('stat-ies-avg').innerText = avgIes;
+        document.getElementById('stat-eff-time').innerText = p.effectiveMinutes + ' min';
+
+        // Config
+        document.getElementById('cfg-name-sub').innerText = p.name;
+        document.getElementById('cfg-threshold').value = p.threshold || 'normal';
+        document.getElementById('cfg-notifications').checked = p.notifications !== false;
+        document.getElementById('cfg-sampling').value = p.sampling || '250';
+
+        // Leaderboard
+        document.getElementById('lb-my-name').innerHTML =
+            `${p.name} <span class="badge" style="background:#EEF2FF;color:#4F46E5;font-size:0.65rem">tú</span>`;
+        document.getElementById('lb-my-pts').innerText = p.xp + ' pts';
+        document.getElementById('lb-my-avatar').src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4F46E5&color=fff`;
+
+        // Tema
+        document.body.dataset.theme = p.theme || 'light';
+        document.getElementById('cfg-dark').checked = p.theme === 'dark';
+
+        // Logros (demo: primer sesión desbloquea "Madrugador")
+        if (p.sessions > 0) document.getElementById('ach-madrugador').classList.remove('locked');
+        if (p.effectiveMinutes >= 120) document.getElementById('ach-foco').classList.remove('locked');
+        if (p.streak >= 7) document.getElementById('ach-racha').classList.remove('locked');
+    }
+
+    let profile = loadProfile();
+    applyProfile(profile);
+
+    function editName() {
+        const newName = prompt('Nombre de usuario:', profile.name);
+        if (newName && newName.trim()) {
+            profile.name = newName.trim();
+            saveProfile(profile);
+            applyProfile(profile);
+        }
+    }
+
+    function changeAvatar() {
+        editName();  // Por ahora genera el avatar desde el nombre
+    }
+
+    function saveConfig() {
+        profile.threshold    = document.getElementById('cfg-threshold').value;
+        profile.notifications = document.getElementById('cfg-notifications').checked;
+        profile.sampling     = document.getElementById('cfg-sampling').value;
+        saveProfile(profile);
+        showSysToast('Configuración guardada');
+    }
+
+    function toggleTheme() {
+        profile.theme = document.getElementById('cfg-dark').checked ? 'dark' : 'light';
+        saveProfile(profile);
+        applyProfile(profile);
+    }
+
+    function resetProfile() {
+        if (!confirm('¿Borrar todos los datos locales y cerrar sesión?')) return;
+        localStorage.removeItem(PROFILE_KEY);
+        profile = defaultProfile();
+        saveProfile(profile);
+        applyProfile(profile);
+        showSysToast('Datos borrados');
+    }
+
+    // ================================================================
+    //  2. NAVEGACIÓN
     // ================================================================
     function switchTab(targetId, el) {
         document.querySelectorAll('.micro-frontend').forEach(e => e.classList.remove('active'));
         document.getElementById(targetId).classList.add('active');
         document.querySelectorAll('.bottom-nav a').forEach(e => e.classList.remove('active'));
-        el.classList.add('active');
+        if (el) el.classList.add('active');
     }
 
     // ================================================================
-    //  2. FLUJO DE PASOS (ONBOARDING → DASHBOARD)
+    //  3. FLUJO ONBOARDING
     // ================================================================
     function goToStep(stepId) {
         document.querySelectorAll('.flow-screen').forEach(s => s.classList.remove('active'));
         document.getElementById(stepId).classList.add('active');
-
-        if (stepId === 'flow-signal') startSignalValidation();
-        if (stepId === 'flow-baseline') { /* baseline iniciado por startBaseline() */ }
+        if (stepId === 'flow-signal')    startSignalValidation();
         if (stepId === 'flow-dashboard') startDashboardMonitor();
     }
 
     // ================================================================
-    //  3. BLUETOOTH / WEARABLE
+    //  4. BLUETOOTH
     // ================================================================
     const STRESS_SERVICE_UUID     = '0000180d-0000-1000-8000-00805f9b34fb';
     const HRV_CHARACTERISTIC_UUID = '00002a37-0000-1000-8000-00805f9b34fb';
@@ -768,11 +909,10 @@
         const statusEl = document.getElementById('bt-status');
         const btnEl    = document.getElementById('btn-bluetooth');
         try {
-            statusEl.innerHTML = '<i class="spinner-border spinner-border-sm"></i> Buscando dispositivo...';
+            statusEl.innerHTML = '<i class="spinner-border spinner-border-sm"></i> Buscando...';
             bluetoothDevice = await navigator.bluetooth.requestDevice({
                 filters: [{ services: [STRESS_SERVICE_UUID] }]
             });
-            statusEl.innerHTML = `<i class="spinner-border spinner-border-sm"></i> Conectando...`;
             const server = await bluetoothDevice.gatt.connect();
             const service = await server.getPrimaryService(STRESS_SERVICE_UUID);
             const char = await service.getCharacteristic(HRV_CHARACTERISTIC_UUID);
@@ -788,7 +928,6 @@
     }
 
     function onBleData(event) {
-        // Protocolo esperado: uint16 RMSSD (ms) en little-endian
         const dv = event.target.value;
         const rmssd = dv.byteLength >= 2 ? dv.getUint16(0, true) : dv.getUint8(0);
         latestRmssd = rmssd;
@@ -801,32 +940,29 @@
     }
 
     // ================================================================
-    //  4. VALIDACIÓN DE SEÑAL (Step 2) — Demo simulada
+    //  5. VALIDACIÓN DE SEÑAL
     // ================================================================
     let signalTimer = null;
 
     function startSignalValidation() {
-        // Simular ECG en canvas
         drawEcgDemo('ecg-canvas');
-
         let pct = 0;
         signalTimer = setInterval(() => {
             pct = Math.min(pct + 7, 100);
-            const bar = document.getElementById('signal-bar');
+            const bar   = document.getElementById('signal-bar');
             const pctEl = document.getElementById('signal-pct');
             const msg   = document.getElementById('signal-msg');
             pctEl.innerText = pct + '%';
             bar.style.width = pct + '%';
-
             if (pct < 50) {
                 bar.className = 'signal-quality-bar bg-danger';
                 msg.innerHTML = '<i class="bi bi-exclamation-triangle text-danger"></i> Señal débil — ajusta los electrodos';
             } else if (pct < 80) {
                 bar.className = 'signal-quality-bar bg-warning';
-                msg.innerHTML = '<i class="bi bi-clock-history text-warning"></i> Estabilizando señal...';
+                msg.innerHTML = '<i class="bi bi-clock-history text-warning"></i> Estabilizando...';
             } else {
                 bar.className = 'signal-quality-bar bg-success';
-                msg.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Señal óptima — listo para continuar';
+                msg.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Señal óptima';
                 document.getElementById('btn-signal-next').disabled = false;
                 clearInterval(signalTimer);
             }
@@ -834,43 +970,34 @@
     }
 
     // ================================================================
-    //  5. BASELINE CAPTURE (Step 4)
+    //  6. BASELINE
     // ================================================================
-    const BASELINE_SECS = 300; // 5 minutos
-    let baselineCountdown = BASELINE_SECS;
-    let baselineInterval  = null;
+    const BASELINE_SECS = 300;
+    let baselineCountdown  = BASELINE_SECS;
+    let baselineInterval   = null;
     let baselineRmssdValues = [];
-    let baselineRmssd = null;
+    let baselineRmssd      = null;
 
     function startBaseline() {
         goToStep('flow-baseline');
         drawEcgDemo('rmssd-canvas');
-
         const circle = document.getElementById('baseline-ring-circle');
-        const circumference = 2 * Math.PI * 58; // r=58
+        const circumference = 2 * Math.PI * 58;
 
         baselineInterval = setInterval(() => {
             baselineCountdown--;
-
-            // Timer display
-            const m = Math.floor(baselineCountdown / 60).toString().padStart(2, '0');
-            const s = (baselineCountdown % 60).toString().padStart(2, '0');
+            const m = Math.floor(baselineCountdown/60).toString().padStart(2,'0');
+            const s = (baselineCountdown%60).toString().padStart(2,'0');
             document.getElementById('baseline-timer').innerText = `${m}:${s}`;
-
-            // Ring progress
             const progress = 1 - baselineCountdown / BASELINE_SECS;
             circle.style.strokeDashoffset = circumference * (1 - progress);
-
-            // Simulated RMSSD
-            const simRmssd = 45 + Math.round(Math.random() * 20 - 10);
+            const simRmssd = 45 + Math.round(Math.random()*20 - 10);
             document.getElementById('rmssd-live').innerText = simRmssd + ' ms';
             baselineRmssdValues.push(simRmssd);
 
             if (baselineCountdown <= 0) {
                 clearInterval(baselineInterval);
-                baselineRmssd = Math.round(
-                    baselineRmssdValues.reduce((a,b)=>a+b,0) / baselineRmssdValues.length
-                );
+                baselineRmssd = Math.round(baselineRmssdValues.reduce((a,b)=>a+b,0)/baselineRmssdValues.length);
                 const btn = document.getElementById('btn-baseline-done');
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Baseline capturado — Ver dashboard';
@@ -880,60 +1007,47 @@
     }
 
     // ================================================================
-    //  6. HRV / RMSSD PROCESSING  (clasificación de estrés)
+    //  7. HRV / RMSSD
     // ================================================================
-    let sessionSeconds = 0;
-    let effectiveSeconds = 0;
-    let stressWindowCount = 0;
+    let sessionSeconds         = 0;
+    let effectiveSeconds       = 0;
+    let stressWindowCount      = 0;
     let consecutiveHighWindows = 0;
-    let sustainedHighMinutes = 0;
-    let sessionInterval = null;
-    let restAccepted = 0;
-    let restReturned = 0;
-    let stressPenaltyPeriods = 0;
-    let windowValues = [];
+    let sustainedHighMinutes   = 0;
+    let sessionInterval        = null;
+    let restAccepted           = 0;
+    let restReturned           = 0;
+    let stressPenaltyPeriods   = 0;
+    let windowValues           = [];
 
     function processRmssd(rmssd) {
         if (!baselineRmssd) return;
-
         const variation = Math.abs((rmssd - baselineRmssd) / baselineRmssd * 100);
-
-        // Classify stress level
         let level, color, badgeHtml;
         if (variation < 15) {
             level = 'Normal'; color = '#10B981';
-            badgeHtml = '<span class="badge rounded-pill" style="background:#DCFCE7;color:#166534">● Normal</span>';
+            badgeHtml = '<span id="stress-level-badge" class="badge rounded-pill" style="background:#DCFCE7;color:#166534">● Normal</span>';
             consecutiveHighWindows = 0;
         } else if (variation < 30) {
             level = 'Moderado'; color = '#F59E0B';
-            badgeHtml = '<span class="badge rounded-pill" style="background:#FEF3C7;color:#92400E">● Moderado</span>';
+            badgeHtml = '<span id="stress-level-badge" class="badge rounded-pill" style="background:#FEF3C7;color:#92400E">● Moderado</span>';
             consecutiveHighWindows = 0;
         } else {
             level = 'Elevado'; color = '#EF4444';
-            badgeHtml = '<span class="badge rounded-pill" style="background:#FEE2E2;color:#991B1B">● Elevado</span>';
+            badgeHtml = '<span id="stress-level-badge" class="badge rounded-pill" style="background:#FEE2E2;color:#991B1B">● Elevado</span>';
             consecutiveHighWindows++;
         }
-
-        // Update UI
         const ring = document.getElementById('stress-ring');
         const val  = document.getElementById('stress-val');
-        if (ring && val) {
-            ring.style.borderColor = color;
-            val.style.color = color;
-            val.innerText = rmssd;
-        }
+        if (ring && val) { ring.style.borderColor = color; val.style.color = color; val.innerText = rmssd; }
         const badge = document.getElementById('stress-level-badge');
         if (badge) badge.outerHTML = badgeHtml;
-
         const varEl = document.getElementById('metric-variation');
         if (varEl) varEl.innerText = variation.toFixed(1) + '%';
-
-        // Check sustained high stress (>=2 consecutive windows = 10 min if window=5min)
         if (consecutiveHighWindows >= 2) {
             sustainedHighMinutes += 5;
-            if (sustainedHighMinutes >= 10) showRestToast();
+            if (sustainedHighMinutes >= 10 && profile.notifications) showRestToast();
         }
-
         windowValues.push({ rmssd, variation, level });
         stressWindowCount++;
         const winEl = document.getElementById('metric-window');
@@ -941,31 +1055,24 @@
     }
 
     // ================================================================
-    //  7. DASHBOARD MONITOR SESSION
+    //  8. MONITOR SESIÓN
     // ================================================================
     function startDashboardMonitor() {
         const baselineRef = document.getElementById('baseline-ref');
-        if (baselineRef && baselineRmssd)
-            baselineRef.innerText = baselineRmssd + ' ms';
-
+        if (baselineRef && baselineRmssd) baselineRef.innerText = baselineRmssd + ' ms';
         drawEcgDemo('ecg-canvas-2');
         drawRmssdTrend('rmssd-canvas-2');
 
         sessionInterval = setInterval(() => {
             sessionSeconds++;
-
-            // Effective time: approximate (in real usage, driven by BLE data)
             if (Math.random() > 0.3) effectiveSeconds++;
-
             const fmt = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
             const sEl = document.getElementById('session-time');
             const eEl = document.getElementById('effective-time');
             if (sEl) sEl.innerText = fmt(sessionSeconds);
             if (eEl) eEl.innerText = fmt(effectiveSeconds);
-
-            // Simulate RMSSD for demo (remove when using real BLE)
             if (!bluetoothDevice) {
-                const demoRmssd = (baselineRmssd || 45) + Math.round(Math.sin(sessionSeconds/20)*15 + (Math.random()-0.5)*10);
+                const demoRmssd = (baselineRmssd||45) + Math.round(Math.sin(sessionSeconds/20)*15 + (Math.random()-0.5)*10);
                 processRmssd(Math.max(10, demoRmssd));
                 const hrEl = document.getElementById('metric-hr');
                 if (hrEl) hrEl.innerText = Math.round(60000 / (demoRmssd * 8));
@@ -974,20 +1081,14 @@
     }
 
     // ================================================================
-    //  8. REST TOAST
+    //  9. DESCANSO
     // ================================================================
-    function showRestToast() {
-        document.getElementById('rest-toast').style.display = 'block';
-    }
+    function showRestToast() { document.getElementById('rest-toast').style.display = 'block'; }
 
     function acceptRest() {
         document.getElementById('rest-toast').style.display = 'none';
-        restAccepted++;
-        sustainedHighMinutes = 0;
-        consecutiveHighWindows = 0;
-        // In a real app: show a rest timer modal here
-        alert('¡Toma 5 minutos de descanso! Vuelve cuando estés listo.');
-        restReturned++;
+        restAccepted++; sustainedHighMinutes = 0; consecutiveHighWindows = 0;
+        alert('¡Descansa 5 minutos! Regresa cuando estés listo.'); restReturned++;
     }
 
     function dismissRest() {
@@ -996,28 +1097,36 @@
     }
 
     // ================================================================
-    //  9. IES CALCULATION & SESSION END
+    //  10. FIN DE SESIÓN + IES
     // ================================================================
     function endSession() {
         clearInterval(sessionInterval);
-
-        const T_efectivo = Math.floor(effectiveSeconds / 60);
-        const P_estres   = stressPenaltyPeriods * 5;
-        const B_descanso = restAccepted * 3;
-        const B_retorno  = restReturned * 2;
-        const ies = Math.max(0, T_efectivo - P_estres + B_descanso + B_retorno);
-        const xp  = ies * 10;
+        const T_ef   = Math.floor(effectiveSeconds/60);
+        const P_est  = stressPenaltyPeriods * 5;
+        const B_desc = restAccepted * 3;
+        const B_ret  = restReturned * 2;
+        const ies    = Math.max(0, T_ef - P_est + B_desc + B_ret);
+        const xp     = ies * 10;
 
         document.getElementById('ies-score').innerText = ies;
         document.getElementById('xp-badge').innerText  = `+${xp} XP`;
 
         const fmt = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
-        document.getElementById('sum-duration').innerText   = fmt(sessionSeconds);
-        document.getElementById('sum-effective').innerText  = fmt(effectiveSeconds);
+        document.getElementById('sum-duration').innerText      = fmt(sessionSeconds);
+        document.getElementById('sum-effective').innerText     = fmt(effectiveSeconds);
         document.getElementById('sum-stress-phases').innerText = stressPenaltyPeriods + restAccepted;
-        document.getElementById('sum-penalty').innerText    = `-${P_estres} pts`;
-        document.getElementById('sum-bonus-rest').innerText = `+${B_descanso} pts`;
-        document.getElementById('sum-bonus-return').innerText=`+${B_retorno} pts`;
+        document.getElementById('sum-penalty').innerText       = `-${P_est} pts`;
+        document.getElementById('sum-bonus-rest').innerText    = `+${B_desc} pts`;
+        document.getElementById('sum-bonus-return').innerText  = `+${B_ret} pts`;
+
+        // Guardar en perfil
+        profile.sessions++;
+        profile.xp += xp;
+        profile.effectiveMinutes += T_ef;
+        profile.iesHistory.push(ies);
+        if (profile.iesHistory.length > 20) profile.iesHistory.shift();
+        saveProfile(profile);
+        applyProfile(profile);
 
         goToStep('flow-summary');
     }
@@ -1032,60 +1141,201 @@
     }
 
     // ================================================================
-    //  10. WEBSOCKETS — SALAS
+    //  11. SALAS — WEBSOCKET (real, sin usuarios simulados)
     // ================================================================
     let timerInterval = null;
+    let timerInterval2 = null;
+    let currentRoomCode = null;
+    let isCreator = false;
 
-    function joinRoom() {
-        const code = document.getElementById('room-code').value.trim();
-        if (!code) return;
-
-        // socket.emit('join_study_room', { room_code: code, username: 'Yo' });
-
-        document.getElementById('room-join-panel').classList.add('d-none');
-        document.getElementById('active-room').classList.remove('d-none');
-
-        document.getElementById('peer-list').innerHTML = `
-            <img src="https://ui-avatars.com/api/?name=T&background=4F46E5&color=fff"
-                class="rounded-circle border border-2 border-success" width="36" title="Tú">
-            <img src="https://ui-avatars.com/api/?name=O&background=10B981&color=fff"
-                class="rounded-circle border border-2 border-warning" width="36" title="Oliver">
-        `;
-        document.getElementById('peer-count').innerText = 2;
-        document.getElementById('peer-stress-list').innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-1 small">
-                <span>Oliver</span>
-                <span class="badge" style="background:#DCFCE7;color:#166534">Normal</span>
-            </div>
-        `;
-        startTimer();
-    }
-
+    /* ── Crear sala ── */
     function createRoom() {
-        const code = Math.random().toString(36).substring(2,7).toUpperCase();
-        document.getElementById('room-code').value = code;
-        joinRoom();
+        isCreator = true;
+        socket.emit('create_room', {
+            username:    profile.name,
+            avatar_seed: profile.name.substring(0,2).toUpperCase(),
+        });
     }
 
+    socket.on('room_created', (data) => {
+        currentRoomCode = data.room_code;
+        document.getElementById('room-entry-panel').classList.add('d-none');
+        document.getElementById('room-code-panel').classList.remove('d-none');
+        document.getElementById('room-code-text').innerText = data.room_code;
+        startRoomTimer('shared-timer', 'timerInterval');
+    });
+
+    /* ── Unirse a sala ── */
+    function joinRoom() {
+        const code = document.getElementById('room-code-input').value.trim().toUpperCase();
+        const errEl = document.getElementById('room-error-msg');
+        errEl.style.display = 'none';
+        if (!code) { errEl.innerText = 'Ingresa un código de sala.'; errEl.style.display = 'block'; return; }
+        isCreator = false;
+        socket.emit('join_study_room', {
+            room_code:   code,
+            username:    profile.name,
+            avatar_seed: profile.name.substring(0,2).toUpperCase(),
+        });
+    }
+
+    socket.on('room_joined', (data) => {
+        currentRoomCode = data.room_code;
+        document.getElementById('room-entry-panel').classList.add('d-none');
+        document.getElementById('room-joined-panel').classList.remove('d-none');
+        document.getElementById('joined-code-display').innerText = data.room_code;
+        startRoomTimer('shared-timer-2', 'timerInterval2');
+    });
+
+    socket.on('room_error', (data) => {
+        const errEl = document.getElementById('room-error-msg');
+        errEl.innerText = data.message;
+        errEl.style.display = 'block';
+    });
+
+    /* ── Lista de miembros (tiempo real) ── */
+    socket.on('room_members', (data) => {
+        if (data.room_code !== currentRoomCode) return;
+        const members = data.members;
+        const count   = members.length;
+
+        // Actualizar contador en ambos paneles
+        const peerCount  = document.getElementById('peer-count');
+        const peerCount2 = document.getElementById('peer-count-2');
+        if (peerCount)  peerCount.innerText  = count;
+        if (peerCount2) peerCount2.innerText = count;
+
+        // Renderizar lista dinámica
+        const html = members.map(m => {
+            const isMe   = m.username === profile.name;
+            const stress = (m.stress_level || '').toLowerCase();
+            const pillClass = stress === 'normal' ? 'normal'
+                            : stress === 'moderado' ? 'moderado'
+                            : stress === 'elevado'  ? 'elevado' : 'sin-dato';
+            const pillLabel = m.stress_level || 'Sin dato';
+            const meBadge   = isMe ? ' <span class="badge" style="background:#EEF2FF;color:#4F46E5;font-size:0.6rem">tú</span>' : '';
+
+            return `
+            <div class="peer-row">
+                <img class="peer-avatar"
+                    src="https://ui-avatars.com/api/?name=${encodeURIComponent(m.avatar_seed)}&background=4F46E5&color=fff"
+                    alt="${m.username}">
+                <span class="peer-name">${m.username}${meBadge}</span>
+                <span class="stress-pill ${pillClass}">${pillLabel}</span>
+            </div>`;
+        }).join('');
+
+        const peerList  = document.getElementById('peer-list');
+        const peerList2 = document.getElementById('peer-list-2');
+        if (peerList)  peerList.innerHTML  = html || '<p class="text-center text-muted small">Sala vacía</p>';
+        if (peerList2) peerList2.innerHTML = html || '<p class="text-center text-muted small">Sala vacía</p>';
+    });
+
+    /* ── Mensajes del sistema (entró/salió) ── */
+    socket.on('system_message', (data) => {
+        showSysToast(data.message);
+    });
+
+    /* ── Salir de sala ── */
     function leaveRoom() {
-        clearInterval(timerInterval);
-        document.getElementById('shared-timer').innerText = '00:00';
-        document.getElementById('room-join-panel').classList.remove('d-none');
-        document.getElementById('active-room').classList.add('d-none');
+        if (!currentRoomCode) {
+            showSysToast('No estás en ninguna sala.');
+            return;
+        }
+        socket.emit('leave_study_room', { room_code: currentRoomCode });
     }
 
-    function startTimer() {
+    socket.on('room_left', (data) => {
+        currentRoomCode = null;
+        isCreator = false;
+        clearInterval(timerInterval);
+        clearInterval(timerInterval2);
+        timerInterval  = null;
+        timerInterval2 = null;
+
+        // Volver al panel de entrada
+        document.getElementById('room-entry-panel').classList.remove('d-none');
+        document.getElementById('room-code-panel').classList.add('d-none');
+        document.getElementById('room-joined-panel').classList.add('d-none');
+
+        // Resetear timers y listas
+        const t1 = document.getElementById('shared-timer');
+        const t2 = document.getElementById('shared-timer-2');
+        if (t1) t1.innerText = '00:00';
+        if (t2) t2.innerText = '00:00';
+
+        document.getElementById('room-code-input').value = '';
+        document.getElementById('peer-list').innerHTML =
+            '<p class="text-center text-muted small">Esperando que alguien se una...</p>';
+        document.getElementById('peer-list-2').innerHTML = '';
+        document.getElementById('room-code-text').innerText = '------';
+
+        showSysToast('Saliste de la sala.');
+    });
+
+    /* ── Timer de sala ── */
+    function startRoomTimer(timerId, intervalVar) {
         let secs = 0;
-        timerInterval = setInterval(() => {
+        const iv = setInterval(() => {
             secs++;
             const m = Math.floor(secs/60).toString().padStart(2,'0');
             const s = (secs%60).toString().padStart(2,'0');
-            document.getElementById('shared-timer').innerText = `${m}:${s}`;
+            const el = document.getElementById(timerId);
+            if (el) el.innerText = `${m}:${s}`;
         }, 1000);
+        if (intervalVar === 'timerInterval')  timerInterval  = iv;
+        if (intervalVar === 'timerInterval2') timerInterval2 = iv;
     }
 
     // ================================================================
-    //  11. CANVAS UTILITIES (ECG + RMSSD demo)
+    //  12. COMPARTIR SALA
+    // ================================================================
+    function copyRoomCode() {
+        const code = document.getElementById('room-code-text').innerText;
+        navigator.clipboard.writeText(code)
+            .then(() => showSysToast('Código copiado: ' + code))
+            .catch(() => showSysToast('No se pudo copiar automáticamente'));
+    }
+
+    function shareRoom() {
+        const code = document.getElementById('room-code-text').innerText;
+        const url  = `${location.origin}${location.pathname}?sala=${code}`;
+        const text = `Únete a mi sala StudySync con el código: ${code}`;
+
+        if (navigator.share) {
+            navigator.share({ title: 'StudySync', text, url }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(`${text}\n${url}`)
+                .then(() => showSysToast('Enlace copiado al portapapeles'))
+                .catch(() => showSysToast(text));
+        }
+    }
+
+    // ── Auto-unirse si hay ?sala=CODIGO en la URL ──
+    window.addEventListener('load', () => {
+        const params = new URLSearchParams(location.search);
+        const salaCode = params.get('sala');
+        if (salaCode) {
+            switchTab('room-app', document.querySelector('[data-tab=rooms]'));
+            document.getElementById('room-code-input').value = salaCode.toUpperCase();
+            setTimeout(joinRoom, 600);
+        }
+    });
+
+    // ================================================================
+    //  13. TOAST DE SISTEMA
+    // ================================================================
+    let sysToastTimeout = null;
+    function showSysToast(msg) {
+        const el = document.getElementById('sys-toast');
+        el.innerText = msg;
+        el.style.display = 'block';
+        clearTimeout(sysToastTimeout);
+        sysToastTimeout = setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
+    // ================================================================
+    //  14. CANVAS: ECG + RMSSD
     // ================================================================
     function getCanvas(id) {
         const el = document.getElementById(id);
@@ -1101,25 +1351,23 @@
         const ctx = canvas.getContext('2d');
         const w = canvas.width, h = canvas.height;
         let t = 0;
-
         function ecgWave(x) {
-            const norm = (x % 100) / 100;
-            if (norm < 0.4) return Math.sin(norm * Math.PI * 5) * 5;
-            if (norm < 0.5) return -30 + norm * 100;
-            if (norm < 0.55) return 70 - (norm - 0.5) * 1400;
-            if (norm < 0.65) return Math.sin((norm - 0.55) * Math.PI * 10) * 8;
+            const norm = (x%100)/100;
+            if (norm < 0.4)  return Math.sin(norm*Math.PI*5)*5;
+            if (norm < 0.5)  return -30 + norm*100;
+            if (norm < 0.55) return 70 - (norm-0.5)*1400;
+            if (norm < 0.65) return Math.sin((norm-0.55)*Math.PI*10)*8;
             return 0;
         }
-
         setInterval(() => {
             ctx.fillStyle = '#0F0E17';
-            ctx.fillRect(0, 0, w, h);
+            ctx.fillRect(0,0,w,h);
             ctx.strokeStyle = '#4F46E5';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            for (let x = 0; x < w; x++) {
-                const y = h / 2 - ecgWave(x + t) * (h / 120);
-                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            for (let x=0; x<w; x++) {
+                const y = h/2 - ecgWave(x+t)*(h/120);
+                x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
             }
             ctx.stroke();
             t += 2;
@@ -1132,41 +1380,29 @@
         const ctx = canvas.getContext('2d');
         const w = canvas.width, h = canvas.height;
         const history = [];
-
         setInterval(() => {
-            const val = (baselineRmssd || 45) + Math.sin(Date.now() / 4000) * 12 + (Math.random() - 0.5) * 6;
+            const val = (baselineRmssd||45) + Math.sin(Date.now()/4000)*12 + (Math.random()-0.5)*6;
             history.push(val);
             if (history.length > w) history.shift();
-
             ctx.fillStyle = '#0F0E17';
-            ctx.fillRect(0, 0, w, h);
-
-            // Baseline line
+            ctx.fillRect(0,0,w,h);
             ctx.strokeStyle = '#6B7280';
-            ctx.setLineDash([4, 4]);
+            ctx.setLineDash([4,4]);
             ctx.beginPath();
-            ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
+            ctx.moveTo(0,h/2); ctx.lineTo(w,h/2);
             ctx.stroke();
             ctx.setLineDash([]);
-
-            // RMSSD curve
             ctx.strokeStyle = '#10B981';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            history.forEach((v, i) => {
+            history.forEach((v,i) => {
                 const x = i;
-                const y = h / 2 - ((v - (baselineRmssd || 45)) / 30) * (h / 2);
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                const y = h/2 - ((v-(baselineRmssd||45))/30)*(h/2);
+                i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
             });
             ctx.stroke();
         }, 300);
     }
-
-    // Auto-start ECG on tutorial load
-    window.addEventListener('load', () => {
-        // Slight delay so canvas dimensions are known
-        setTimeout(() => {}, 200);
-    });
     </script>
 </body>
 </html>
